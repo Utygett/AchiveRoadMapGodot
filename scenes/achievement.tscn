@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://vr6j7gcboge0"]
+
+[ext_resource type="Script" uid="uid://yy7ycriex138" path="res://scripts/achievement.gd" id="1_4cbr5"]
+[ext_resource type="Texture2D" uid="uid://bt1nt6yw2mrf2" path="res://assets/square_border.png" id="2_rnxx6"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gdmlk"]
+
+[node name="Achievement" type="Area2D"]
+script = ExtResource("1_4cbr5")
+
+[node name="Icon" type="Sprite2D" parent="."]
+texture = ExtResource("2_rnxx6")
+
+[node name="Collision" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_gdmlk")
+
+[node name="NameLabel" type="Label" parent="."]
+unique_name_in_owner = true
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Достижение"
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
+[connection signal="mouse_entered" from="." to="." method="_on_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_mouse_exited"]

@@ -55,8 +55,14 @@ max_value = 3.0
 step = 0.1
 value = 1.0
 
+[node name="CreateAchive" type="Button" parent="MainPanel/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Создать достижение"
+
 [connection signal="pressed" from="MainPanel/VBoxContainer/AddImageButton" to="." method="_on_add_image_button_pressed"]
 [connection signal="color_changed" from="MainPanel/VBoxContainer/ColorPickerButton" to="." method="_on_color_picker_button_color_changed"]
 [connection signal="value_changed" from="MainPanel/VBoxContainer/WidthSpin" to="." method="_on_width_spin_value_changed"]
 [connection signal="value_changed" from="MainPanel/VBoxContainer/HeightSpin" to="." method="_on_height_spin_value_changed"]
 [connection signal="value_changed" from="MainPanel/VBoxContainer/ZoomSlider" to="." method="_on_zoom_slider_value_changed"]
+[connection signal="pressed" from="MainPanel/VBoxContainer/CreateAchive" to="." method="_on_create_achive_pressed"]
