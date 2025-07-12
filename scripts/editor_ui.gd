@@ -33,10 +33,12 @@ func _on_color_picker_button_color_changed(color: Color) -> void:
 	# Здесь будет изменение фона
 
 func _on_width_spin_value_changed(value):
-	print("Ширина:", value)
+	#print("Ширина:", value)
+	pass
 
 func _on_height_spin_value_changed(value):
-	print("Высота:", value)
+	#print("Высота:", value)
+	pass
 
 func _on_zoom_slider_value_changed(value):
 	print("Масштаб:", value)
