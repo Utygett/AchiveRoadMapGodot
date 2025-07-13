@@ -4,6 +4,7 @@ var drag_sensitivity = 1
 var is_dragging = false
 var last_mouse_position = Vector2.ZERO
 var current_drag_offset = Vector2.ZERO
+var can_drag_camera = true  # Флаг, разрешающий перемещение камеры
 
 func _ready():
 	# 1. Делаем камеру текущей
@@ -11,11 +12,11 @@ func _ready():
 	# 2. Включаем обработку процесса
 	set_process(true)
 	var viewport_size = get_viewport_rect().size
-	print("Viewport size: ", viewport_size)
-	print("Camera zoom: ", zoom)
-	print("Camera limits: ", limit_left, ", ", limit_right, ", ", limit_top, ", ", limit_bottom)
 
 func _input(event):
+	# Пропускаем обработку, если перетаскивание камеры запрещено
+	if !can_drag_camera:
+		return
 	if event is InputEventMouseButton:
 		# Перетаскивание ЛКМ
 		if event.button_index == MOUSE_BUTTON_LEFT:
@@ -39,7 +40,7 @@ func _input(event):
 				enforce_camera_limits()
 
 func _process(delta):
-	if is_dragging:
+	if is_dragging && can_drag_camera:
 		var current_mouse_position = get_viewport().get_mouse_position()
 		
 		# Рассчитываем смещение
@@ -50,9 +51,14 @@ func _process(delta):
 		
 		# Обновляем позицию мыши
 		last_mouse_position = current_mouse_position
-		
-		# Только визуализация - не влияет на движение
-		print("Camera position: ", position)
+
+# Добавляем методы для управления доступностью перетаскивания
+func disable_camera_drag():
+	can_drag_camera = false
+	is_dragging = false  # Сбрасываем текущее перетаскивание
+
+func enable_camera_drag():
+	can_drag_camera = true
 
 func enforce_camera_limits():
 	# Важно: получаем актуальный размер вьюпорта

@@ -1,6 +1,12 @@
 extends Node2D
 
 @onready var grid_background: TileMapLayer = %GridBackground
+@onready var achievement_container: Node2D = %AchievementContainer
+@onready var main_camera: Camera2D = %MainCamera
+
+var tile_width = 20
+var tile_height = 15
+var dragged_achievement = null
 
 func _ready():
 	# 1. Получаем данные из TileMapLayer
@@ -8,7 +14,7 @@ func _ready():
 	var source_id = tile_set.get_source_id(0)
 	
 	# 2. Размер карты в тайлах
-	var map_size = Vector2i(20, 15)
+	var map_size = Vector2i(tile_width, tile_height)
 	
 	# 3. Заполняем слой
 	for x in range(map_size.x):
@@ -28,6 +34,11 @@ func _ready():
 	
 	# 5. Создаем границы карты
 	create_map_borders(pixel_size)
+	
+	
+		# Добавляем тестовые достижения
+	add_achievement(Vector2(200, 150), "Счёт до 20", "res://assets/count_to_20.png")
+	add_achievement(Vector2(500, 300), "Сумма до 10", "res://assets/Sum_to_10.png")
 
 func create_map_borders(size: Vector2):
 	# Создаем 4 коллайдера по краям карты
@@ -65,7 +76,7 @@ func create_map_borders(size: Vector2):
 	# Визуализация границ
 	var border_line = Line2D.new()
 	border_line.width = 4
-	border_line.default_color = Color.RED
+	border_line.default_color = Color.ANTIQUE_WHITE
 	border_line.points = [
 		Vector2(0, 0),
 		Vector2(size.x, 0),
@@ -75,16 +86,22 @@ func create_map_borders(size: Vector2):
 	]
 	add_child(border_line)
 
-#func setup_camera(map_size: Vector2):
-	#var camera = Camera2D.new()
-	#add_child(camera)
-	#camera.make_current()
-	#
-	## Настройка ограничений камеры
-	#camera.limit_left = 0
-	#camera.limit_top = 0
-	#camera.limit_right = map_size.x
-	#camera.limit_bottom = map_size.y
-	#
-	## Начальный зум
-	#camera.zoom = Vector2(0.8, 0.8)
+# В основной скрипт карты (Map.gd)
+func add_achievement(position: Vector2, name: String, icon_path: String):
+	var achievement_scene = preload("res://scenes/achievement.tscn")
+	var new_achievement = achievement_scene.instantiate()
+	
+	# Настройка достижения
+	new_achievement.position = position
+	new_achievement.achievement_name = name
+	new_achievement.icon = load(icon_path)
+	
+	# Добавляем в контейнер
+	achievement_container.add_child(new_achievement)
+	# Подключаем сигнал для отслеживания перетаскивания
+	new_achievement.is_dragging_changed.connect(_on_achievement_dragging.bind(new_achievement))
+
+# Функция для обработки перетаскивания
+func _on_achievement_dragging(is_dragging, achievement):
+	dragged_achievement = achievement if is_dragging else null
+	main_camera.is_dragging_object = is_dragging
