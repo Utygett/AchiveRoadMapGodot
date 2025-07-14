@@ -3,6 +3,7 @@ extends Node2D
 @onready var grid_background: TileMapLayer = %GridBackground
 @onready var achievement_container: Node2D = %AchievementContainer
 @onready var main_camera: Camera2D = %MainCamera
+@onready var connection_manager: Node = $ConnectionManager
 
 var tile_width = 20
 var tile_height = 15
@@ -39,6 +40,7 @@ func _ready():
 		# Добавляем тестовые достижения
 	add_achievement(Vector2(200, 150), "Счёт до 20", "res://assets/count_to_20.png")
 	add_achievement(Vector2(500, 300), "Сумма до 10", "res://assets/Sum_to_10.png")
+	add_achievement(Vector2(700, 300), "Сравнение", "res://assets/comprassion.png")
 
 func create_map_borders(size: Vector2):
 	# Создаем 4 коллайдера по краям карты
