@@ -1,42 +1,34 @@
 extends Node
 
 var connection_scene = preload("res://scenes/connection.tscn")
-var active_connection: Node2D = null
 var connection_from: Node2D = null
 var connection_from_anchor: Vector2 = Vector2.ZERO
 
-func start_connection(from: Node2D, from_anchor: Vector2):
+func start_connection(from: Node2D):
 	connection_from = from
-	connection_from_anchor = from_anchor
-	active_connection = connection_scene.instantiate()
-	get_tree().current_scene.add_child(active_connection)
-	
-	# Инициализируем временную связь
-	active_connection.setup(from, null, from_anchor, Vector2.ZERO)
 
-func update_connection_to(position: Vector2):
-	if active_connection:
-		# Обновляем конечную точку
-		active_connection.to_anchor = position - active_connection.from_achievement.global_position
-		active_connection.update_connection()
-
-func complete_connection(to: Node2D, to_anchor: Vector2):
-	if active_connection and connection_from and to:
-		# Завершаем связь
-		active_connection.setup(connection_from, to, connection_from_anchor, to_anchor)
+func end_connection(to: Node2D):
+	if connection_from and to:
+		#Создаем связь 
+		var active_connection = connection_scene.instantiate()
+		get_tree().current_scene.add_child(active_connection)
 		
+		# Регистрируем достижения в связи 
+		active_connection.set_start_achievement(connection_from)
+		active_connection.set_end_achievement(to)
+		active_connection.update_connection()
 		# Регистрируем связь в достижениях
 		connection_from.add_outgoing_connection(active_connection)
 		to.add_incoming_connection(active_connection)
-		
 		# Сбрасываем состояние
-		active_connection = null
+		cancel_connection()
+		
+# Сбрасываем состояние
+func cancel_connection():
 		connection_from = null
 		connection_from_anchor = Vector2.ZERO
 
-func cancel_connection():
-	if active_connection:
-		active_connection.queue_free()
-		active_connection = null
-		connection_from = null
-		connection_from_anchor = Vector2.ZERO
+func is_connection_start():
+	if connection_from:
+		return true
+	return false

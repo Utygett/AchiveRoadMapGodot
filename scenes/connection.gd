@@ -10,16 +10,14 @@ var from_anchor: Vector2 = Vector2.ZERO
 var to_anchor: Vector2 = Vector2.ZERO
 var bone_scene = preload("res://scenes/bone.tscn")
 
-# Упрощенные функции
-func set_start_point(achievement: Node2D, anchor: Vector2):
-	from_achievement = achievement
-	from_anchor = anchor
-	#update_connection()
 
-func set_end_point(achievement: Node2D, anchor: Vector2):
+func set_start_achievement(achievement: Node2D):
+	from_achievement = achievement
+	from_anchor = achievement.global_position
+
+func set_end_achievement(achievement: Node2D):
 	to_achievement = achievement
-	to_anchor = anchor
-	update_connection()
+	to_anchor = achievement.global_position
 
 func update_end_point(achievement: Node2D, position: Vector2):
 	to_achievement = achievement
@@ -39,7 +37,7 @@ func update_connection():
 	line.clear_points()
 	
 	# Добавляем начальную точку
-	var start_point = from_achievement.global_position + from_anchor
+	var start_point = from_achievement.global_position
 	line.add_point(start_point)
 	
 	# Добавляем все опорные точки
@@ -47,15 +45,15 @@ func update_connection():
 		line.add_point(bone.global_position)
 	
 	# Добавляем конечную точку
-	var end_point = to_achievement.global_position + to_anchor
+	var end_point = to_achievement.global_position
 	line.add_point(end_point)
 	
-	# Обновляем позицию и поворот стрелки
-	if line.get_point_count() > 1:
-		var last_segment_start = line.get_point_position(line.get_point_count()-2)
-		var last_segment_end = line.get_point_position(line.get_point_count()-1)
-		arrow.global_position = last_segment_end
-		arrow.rotation = (last_segment_end - last_segment_start).angle()
+	## Обновляем позицию и поворот стрелки
+	#if line.get_point_count() > 1:
+		#var last_segment_start = line.get_point_position(line.get_point_count()-2)
+		#var last_segment_end = line.get_point_position(line.get_point_count()-1)
+		#arrow.global_position = last_segment_end
+		#arrow.rotation = (last_segment_end - last_segment_start).angle()
 
 # Сохранение данных связи
 func save_data() -> Dictionary:

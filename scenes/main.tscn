@@ -52,5 +52,6 @@ file_mode = 0
 filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.webp")
 
 [node name="ConnectionManager" parent="." instance=ExtResource("5_tbgi4")]
+unique_name_in_owner = true
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

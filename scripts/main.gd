@@ -97,6 +97,7 @@ func add_achievement(position: Vector2, name: String, icon_path: String):
 	new_achievement.position = position
 	new_achievement.achievement_name = name
 	new_achievement.icon = load(icon_path)
+	new_achievement.connection_manager = connection_manager
 	
 	# Добавляем в контейнер
 	achievement_container.add_child(new_achievement)
