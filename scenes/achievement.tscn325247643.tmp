@@ -7,8 +7,9 @@
 size = Vector2(64, 64)
 
 [node name="Achievement" type="Node2D"]
-z_index = 10
 script = ExtResource("1_rnxx6")
+achievement_name = null
+description = null
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 unique_name_in_owner = true

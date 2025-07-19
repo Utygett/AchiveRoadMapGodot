@@ -74,7 +74,7 @@ func _on_area_input_event(viewport, event, shape_idx):
 			
 			
 			# Возвращаем на обычный слой
-			z_index = 10 if mouse_over else 0
+			z_index = 20 if mouse_over else 10
 			
 			# Возвращаем к нормальному виду
 			var drop_tween = create_tween()
@@ -113,21 +113,29 @@ func _on_area_mouse_exited():
 	# Возвращаем к нормальному размеру
 	var tween = create_tween()
 	tween.tween_property(self, "scale", base_scale, 0.2)
-	z_index = 0  # Возвращаем на обычный слой
+	z_index = 10  # Возвращаем на обычный слой
 
 func show_context_menu():
-	# Создаем простое контекстное меню
 	var menu = PopupMenu.new()
+	
+	# Добавление пунктов меню
 	menu.add_item("Просмотреть описание", MenuItems.INFO)
-	if (!connection_manager.is_connection_start()):
+	if !connection_manager.is_connection_start():
 		menu.add_item("Начать соединение", MenuItems.START_CONNECTION)
 	else:
 		menu.add_item("Завершить соединение", MenuItems.END_CONNECTION)
 	menu.add_item("Удалить", MenuItems.DELETE)
-	add_child(menu)
 	
-	menu.popup(Rect2(get_global_mouse_position(), Vector2(150, 80)))
+	# Добавляем к корневому viewport
+	get_viewport().add_child(menu)
+	
+	# Получаем позицию мыши с учетом камеры
+	var mouse_pos = get_viewport().get_mouse_position()
+	menu.popup(Rect2(mouse_pos, Vector2.ZERO))
+	
+	# Обработка выбора и автоматическое удаление
 	menu.id_pressed.connect(_on_menu_item_selected)
+	menu.popup_hide.connect(menu.queue_free)
 
 func _on_menu_item_selected(id):
 	match id:

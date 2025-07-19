@@ -10,7 +10,6 @@ var from_anchor: Vector2 = Vector2.ZERO
 var to_anchor: Vector2 = Vector2.ZERO
 var bone_scene = preload("res://scenes/bone.tscn")
 
-
 func set_start_achievement(achievement: Node2D):
 	from_achievement = achievement
 	from_anchor = achievement.global_position
@@ -49,11 +48,11 @@ func update_connection():
 	line.add_point(end_point)
 	
 	## Обновляем позицию и поворот стрелки
-	#if line.get_point_count() > 1:
-		#var last_segment_start = line.get_point_position(line.get_point_count()-2)
-		#var last_segment_end = line.get_point_position(line.get_point_count()-1)
-		#arrow.global_position = last_segment_end
-		#arrow.rotation = (last_segment_end - last_segment_start).angle()
+	if line.get_point_count() > 1:
+		var last_segment_start = line.get_point_position(line.get_point_count()-2)
+		var last_segment_end = line.get_point_position(line.get_point_count()-1)
+		arrow.global_position = last_segment_end
+		arrow.rotation = (last_segment_end - last_segment_start).angle()
 
 # Сохранение данных связи
 func save_data() -> Dictionary:

@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://u7fdu4csjmi5" path="res://scenes/connection.gd" id="1_u7hla"]
 
 [node name="Connection" type="Node2D"]
+z_index = 9
 script = ExtResource("1_u7hla")
 
 [node name="Line" type="Line2D" parent="."]
