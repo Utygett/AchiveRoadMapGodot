@@ -1,3 +1,4 @@
+
 extends Node2D
 
 @onready var line: Line2D = %Line
@@ -17,12 +18,11 @@ var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 func _ready() -> void:
 	z_index = 15
 
-func set_start_achievement(achievement: Node2D):
-	from_achievement = achievement
-
-func set_end_achievement(achievement: Node2D):
-	to_achievement = achievement
-	to_anchor = achievement.global_position
+# Инициализация соединения
+func initialize(from: Node2D, to: Node2D):
+	from_achievement = from
+	to_achievement = to
+	update_connection()
 
 func update_end_point(achievement: Node2D, position: Vector2):
 	to_achievement = achievement
@@ -30,12 +30,39 @@ func update_end_point(achievement: Node2D, position: Vector2):
 	#update_connection()
 
 func update_connection():
-	# Сохраняем пользовательские точки (все кроме первой и последней)
-	var user_points = []
-	if line.get_point_count() > 2:
-		for i in range(1, line.get_point_count() - 1):
-			user_points.append(line.get_point_position(i))
+	# Обновляем только первую и последнюю точки
 	
+	if line.get_point_count() == 0:
+		create_start_points()
+	
+	
+	update_boundary_points()
+	
+	# Обновляем позиции всех точек-костей
+	for i in range(1, line.get_point_count() - 1):
+		var point = bones_container.get_child(i - 1)
+		line.set_point_position(i, point.global_position)
+	
+	# Обновляем стрелку
+	if line.get_point_count() > 1:
+		var last_idx = line.get_point_count() - 1
+		var segment_start = line.get_point_position(last_idx - 1)
+		var segment_end = line.get_point_position(last_idx)
+		arrow.global_position = segment_end
+		arrow.rotation = (segment_end - segment_start).angle()
+	
+	line.generate_collision()
+
+func create_start_points():
+	#var point_scene = preload("res://scenes/connection_point.tscn")
+	#var point_start = point_scene.instantiate()
+	#var point_end = point_scene.instantiate()
+	#bones_container.add_child(point_start)
+	#bones_container.add_child(point_end)
+	line.add_point(Vector2.ZERO)
+	line.add_point(Vector2.ZERO)
+
+func update_boundary_points():
 	# Получаем спрайты достижений
 	var start_sprite = from_achievement.get_node("Sprite2D")
 	var end_sprite = to_achievement.get_node("Sprite2D")
@@ -57,20 +84,16 @@ func update_connection():
 		end_rect
 	)
 	
-	# Обновляем линию, сохраняя пользовательские точки
-	line.clear_points()
-	line.add_point(start_point)  # Первая точка - всегда граница начального спрайта
+	#var start_bone = bones_container.get_child(0) as ConnectionPoint
+	#var end_bone = bones_container.get_child(bones_container.get_child_count() - 1) as ConnectionPoint
+	#
+	#start_bone.global_position = start_point
+	#end_bone.global_position = end_point
 	
-	# Добавляем сохраненные пользовательские точки
-	for point in user_points:
-		line.add_point(point)
+	# Обновляем граничные точки
+	line.set_point_position(0, start_point)
+	line.set_point_position(line.get_point_count() - 1, end_point)
 	
-	# Добавляем опорные точки из контейнера (если они еще не добавлены)
-	for bone in bones_container.get_children():
-		if not user_points.has(bone.global_position):
-			line.add_point(bone.global_position)
-	
-	line.add_point(end_point)  # Последняя точка - всегда граница конечного спрайта
 	
 	# Обновляем стрелку
 	if line.get_point_count() > 1:
@@ -81,6 +104,69 @@ func update_connection():
 		arrow.rotation = (segment_end - segment_start).angle()
 		
 	line.generate_collision()
+
+# Добавление новой точки
+func add_point_at_position(position: Vector2):
+	# Создаем экземпляр точки
+	var point_scene = preload("res://scenes/connection_point.tscn")
+	var point = point_scene.instantiate()
+	point.global_position = position
+	point.connection = self
+	point.position_changed.connect(_on_point_position_changed)
+	
+	# Добавляем в контейнер костей
+	bones_container.add_child(point)
+	
+	# Определяем индекс для вставки в линию
+	var insert_index = find_closest_segment_index(position)
+	
+	# Добавляем точку в линию
+	line.add_point(position, insert_index)
+	
+	# Обновляем соединение
+	update_connection()
+
+# Удаление точки
+func remove_point(point: Node2D):
+	# Находим индекс точки в линии
+	var point_index = -1
+	for i in range(1, line.get_point_count() - 1):
+		if line.get_point_position(i) == point.global_position:
+			point_index = i
+			break
+	
+	if point_index != -1:
+		# Удаляем точку из линии
+		line.remove_point(point_index)
+		
+		# Удаляем точку из контейнера
+		bones_container.remove_child(point)
+		
+		# Обновляем соединение
+		update_connection()
+
+# Поиск ближайшего сегмента для вставки
+func find_closest_segment_index(position: Vector2) -> int:
+	var points = line.get_points()
+	if points.size() < 2:
+		return 1
+	
+	var min_distance = INF
+	var insert_index = -1
+	
+	for i in range(points.size() - 1):
+		var segment_start = points[i]
+		var segment_end = points[i + 1]
+		
+		var closest = Geometry2D.get_closest_point_to_segment(position, segment_start, segment_end)
+		var distance = position.distance_to(closest)
+		
+		if distance < min_distance:
+			min_distance = distance
+			insert_index = i + 1
+	
+	return insert_index if insert_index != -1 else line.get_point_count()
+
 
 # Получаем глобальный прямоугольник для Sprite2D
 func get_sprite_global_rect(sprite: Sprite2D) -> Rect2:
@@ -148,6 +234,10 @@ func calculate_boundary_point(from: Vector2, to: Vector2, rect: Rect2) -> Vector
 	
 	# Fallback: если не нашли пересечений, возвращаем центр прямоугольника
 	return rect.position + rect.size / 2
+
+# Обработчик изменения позиции точки
+func _on_point_position_changed():
+	update_connection()
 
 # Сохранение данных связи
 func save_data() -> Dictionary:

@@ -1,8 +1,12 @@
+class_name  ConnectionPoint
 extends Node2D
+
+signal position_changed()
 
 var drag = false
 var drag_offset = Vector2.ZERO
 var connection: Node # Ссылка на родительское соединение
+
 
 func _ready():
 	# Настраиваем коллизию
@@ -23,7 +27,12 @@ func _on_area_input_event(_viewport, event, _shape_idx):
 				# Начало перетаскивания
 				drag = true
 				drag_offset = global_position - get_global_mouse_position()
-				get_tree().set_input_as_handled()
+				# Отключаем перетаскивание камеры
+				var camera = get_tree().get_first_node_in_group("main_camera")
+				if camera:
+					camera.disable_camera_drag()
+				# Помечаем событие как обработанное
+				get_viewport().set_input_as_handled()
 				# Поднимаем точку наверх
 				z_index = 1
 			else:
@@ -43,3 +52,4 @@ func _on_area_input_event(_viewport, event, _shape_idx):
 func _process(_delta):
 	if drag:
 		global_position = get_global_mouse_position() + drag_offset
+		position_changed.emit()

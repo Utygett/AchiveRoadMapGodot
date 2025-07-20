@@ -14,9 +14,7 @@ func end_connection(to: Node2D):
 		get_tree().current_scene.add_child(active_connection)
 		
 		# Регистрируем достижения в связи 
-		active_connection.set_start_achievement(connection_from)
-		active_connection.set_end_achievement(to)
-		active_connection.update_connection()
+		active_connection.initialize(connection_from, to)
 		# Регистрируем связь в достижениях
 		connection_from.add_outgoing_connection(active_connection)
 		to.add_incoming_connection(active_connection)

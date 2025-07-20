@@ -39,7 +39,7 @@ func _ready():
 	area_2d.mouse_entered.connect(_on_area_mouse_entered)
 	area_2d.mouse_exited.connect(_on_area_mouse_exited)
 
-func _on_area_input_event(viewport, event, shape_idx):
+func _on_area_input_event(viewport,event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			# Начало перетаскивания
@@ -55,7 +55,7 @@ func _on_area_input_event(viewport, event, shape_idx):
 				camera.disable_camera_drag()
 			
 			# Помечаем событие как обработанное
-			get_viewport().set_input_as_handled()
+			viewport.set_input_as_handled()
 			
 			# Эффект "поднятия"
 			var lift_tween = create_tween()
