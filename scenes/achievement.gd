@@ -1,7 +1,5 @@
 # achievement.gd
 extends Node2D
-
-signal is_dragging_changed(drag :bool)
 # Настройки
 @export var achievement_name: String = "Новое достижение"
 @export var icon: Texture2D
@@ -66,33 +64,16 @@ func _on_area_input_event(viewport, event, shape_idx):
 		else:
 			# Конец перетаскивания
 			is_dragging = false
-			
 			# Включаем перетаскивание камеры
 			var camera = get_tree().get_first_node_in_group("main_camera")
 			if camera:
 				camera.enable_camera_drag()
-			
-			
 			# Возвращаем на обычный слой
 			z_index = 20 if mouse_over else 10
-			
 			# Возвращаем к нормальному виду
 			var drop_tween = create_tween()
 			drop_tween.tween_property(self, "scale", base_scale * (Vector2(1.1, 1.1) if mouse_over else Vector2.ONE), 0.2)
 			drop_tween.parallel().tween_property(self, "modulate", base_modulate, 0.2)
-	
-	
-	
-	#if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		#if event.pressed:
-			## Начало перетаскивания
-			#is_dragging = true
-			#is_dragging_changed.emit(true)
-			#drag_offset = global_position - get_global_mouse_position()
-		#else:
-			## Конец перетаскивания
-			#is_dragging = false
-			#is_dragging_changed.emit(false)
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		show_context_menu()
 
@@ -106,7 +87,7 @@ func _on_area_mouse_entered():
 	# Анимация при наведении
 	var tween = create_tween()
 	tween.tween_property(self, "scale", base_scale * Vector2(1.1, 1.1), 0.2)
-	z_index = 10  # Поднимаем на передний план
+	z_index = 100  # Поднимаем на передний план
 
 func _on_area_mouse_exited():
 	mouse_over = false

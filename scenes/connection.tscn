@@ -1,6 +1,9 @@
-[gd_scene load_steps=2 format=3 uid="uid://d14ngkag7j0bb"]
+[gd_scene load_steps=5 format=3 uid="uid://d14ngkag7j0bb"]
 
 [ext_resource type="Script" uid="uid://u7fdu4csjmi5" path="res://scenes/connection.gd" id="1_u7hla"]
+[ext_resource type="Script" uid="uid://dchu6hby3vhgd" path="res://scenes/area_2d.gd" id="2_68o8k"]
+[ext_resource type="Script" uid="uid://bcmtmbfw1c6d5" path="res://scenes/line.gd" id="2_ke00m"]
+[ext_resource type="Texture2D" uid="uid://c11jkl6eo7scv" path="res://assets/arrow.png" id="2_nm06n"]
 
 [node name="Connection" type="Node2D"]
 z_index = 9
@@ -8,9 +11,16 @@ script = ExtResource("1_u7hla")
 
 [node name="Line" type="Line2D" parent="."]
 unique_name_in_owner = true
+width = 5.0
+script = ExtResource("2_ke00m")
+
+[node name="Area2D" type="Area2D" parent="Line"]
+unique_name_in_owner = true
+script = ExtResource("2_68o8k")
 
 [node name="Arrow" type="Sprite2D" parent="."]
 unique_name_in_owner = true
+texture = ExtResource("2_nm06n")
 
 [node name="Bones" type="Node2D" parent="."]
 unique_name_in_owner = true

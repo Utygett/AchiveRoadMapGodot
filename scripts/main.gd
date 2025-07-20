@@ -101,8 +101,6 @@ func add_achievement(position: Vector2, name: String, icon_path: String):
 	
 	# Добавляем в контейнер
 	achievement_container.add_child(new_achievement)
-	# Подключаем сигнал для отслеживания перетаскивания
-	new_achievement.is_dragging_changed.connect(_on_achievement_dragging.bind(new_achievement))
 
 # Функция для обработки перетаскивания
 func _on_achievement_dragging(is_dragging, achievement):
