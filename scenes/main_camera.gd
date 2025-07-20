@@ -11,7 +11,6 @@ func _ready():
 	make_current()
 	# 2. Включаем обработку процесса
 	set_process(true)
-	var viewport_size = get_viewport_rect().size
 
 func _input(event):
 	# Пропускаем обработку, если перетаскивание камеры запрещено
@@ -39,7 +38,7 @@ func _input(event):
 			if prev_zoom != zoom:
 				enforce_camera_limits()
 
-func _process(delta):
+func _process(_delta):
 	if is_dragging && can_drag_camera:
 		var current_mouse_position = get_viewport().get_mouse_position()
 		

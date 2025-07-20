@@ -89,13 +89,13 @@ func create_map_borders(size: Vector2):
 	add_child(border_line)
 
 # В основной скрипт карты (Map.gd)
-func add_achievement(position: Vector2, name: String, icon_path: String):
+func add_achievement(achieve_position: Vector2, achieve_name: String, icon_path: String):
 	var achievement_scene = preload("res://scenes/achievement.tscn")
 	var new_achievement = achievement_scene.instantiate()
 	
 	# Настройка достижения
-	new_achievement.position = position
-	new_achievement.achievement_name = name
+	new_achievement.position = achieve_position
+	new_achievement.achievement_name = achieve_name
 	new_achievement.icon = load(icon_path)
 	new_achievement.connection_manager = connection_manager
 	

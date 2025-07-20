@@ -18,7 +18,7 @@ enum MenuItems {
 	
 var is_dragging = false
 var drag_offset = Vector2.ZERO
-var mouse_over = false
+var mouse_over = false #Мышь над объектом?
 var base_scale = Vector2.ONE  # Сохраняем базовый размер
 var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 # Новые переменные для управления связями
@@ -39,7 +39,7 @@ func _ready():
 	area_2d.mouse_entered.connect(_on_area_mouse_entered)
 	area_2d.mouse_exited.connect(_on_area_mouse_exited)
 
-func _on_area_input_event(viewport,event, shape_idx):
+func _on_area_input_event(viewport,event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			# Начало перетаскивания
@@ -69,7 +69,7 @@ func _on_area_input_event(viewport,event, shape_idx):
 			if camera:
 				camera.enable_camera_drag()
 			# Возвращаем на обычный слой
-			z_index = 20 if mouse_over else 10
+			z_index = 75 if mouse_over else 50
 			# Возвращаем к нормальному виду
 			var drop_tween = create_tween()
 			drop_tween.tween_property(self, "scale", base_scale * (Vector2(1.1, 1.1) if mouse_over else Vector2.ONE), 0.2)
@@ -77,7 +77,7 @@ func _on_area_input_event(viewport,event, shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		show_context_menu()
 
-func _process(delta):
+func _process(_delta):
 	if is_dragging:
 		global_position = get_global_mouse_position() + drag_offset
 		update_connection()
@@ -87,14 +87,14 @@ func _on_area_mouse_entered():
 	# Анимация при наведении
 	var tween = create_tween()
 	tween.tween_property(self, "scale", base_scale * Vector2(1.1, 1.1), 0.2)
-	z_index = 100  # Поднимаем на передний план
+	z_index = 75  # Поднимаем на передний план
 
 func _on_area_mouse_exited():
 	mouse_over = false
 	# Возвращаем к нормальному размеру
 	var tween = create_tween()
 	tween.tween_property(self, "scale", base_scale, 0.2)
-	z_index = 10  # Возвращаем на обычный слой
+	z_index = 50  # Возвращаем на обычный слой
 
 func show_context_menu():
 	var menu = PopupMenu.new()

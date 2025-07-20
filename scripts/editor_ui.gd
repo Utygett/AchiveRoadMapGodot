@@ -32,11 +32,11 @@ func _on_color_picker_button_color_changed(color: Color) -> void:
 	print("Новый цвет фона:", color)
 	# Здесь будет изменение фона
 
-func _on_width_spin_value_changed(value):
+func _on_width_spin_value_changed(_value):
 	#print("Ширина:", value)
 	pass
 
-func _on_height_spin_value_changed(value):
+func _on_height_spin_value_changed(_value):
 	#print("Высота:", value)
 	pass
 

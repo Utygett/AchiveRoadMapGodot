@@ -6,7 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://c11jkl6eo7scv" path="res://assets/arrow.png" id="2_nm06n"]
 
 [node name="Connection" type="Node2D"]
-z_index = 9
+z_index = 10
 script = ExtResource("1_u7hla")
 
 [node name="Line" type="Line2D" parent="."]

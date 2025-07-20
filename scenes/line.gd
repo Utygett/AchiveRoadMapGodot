@@ -10,14 +10,17 @@ func _ready() -> void:
 	area.input_event.connect(_on_input_event)
 
 func _on_mouse_entered():
-	print("Мышка на линии!")
+	pass
 
 func _on_mouse_exited():
-	print("Мышка ушла с линии!")
+	pass
 
 func _on_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton and event.pressed:
+		if connection.is_mouse_over_point():
+			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
+			print("Клик по линии ЛЕВОЙ!")
 			var click_position = to_local(event.global_position)
 			add_point_at_position(click_position)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
@@ -26,8 +29,8 @@ func _on_input_event(_viewport, event, _shape_idx):
 
 
 func generate_collision():
-	var points = get_points()
-	if points.size() < 2:
+	var line_points = get_points()
+	if line_points.size() < 2:
 		return
 	
 	# Удаляем старый полигон
@@ -38,44 +41,44 @@ func generate_collision():
 	area.add_child(collision)
 	
 	# Простой вариант для прямых линий
-	if points.size() == 2:
-		var dir = (points[1] - points[0]).normalized().orthogonal()
+	if line_points.size() == 2:
+		var dir = (line_points[1] - line_points[0]).normalized().orthogonal()
 		collision.polygon = PackedVector2Array([
-			points[0] + dir * collision_width,
-			points[1] + dir * collision_width,
-			points[1] - dir * collision_width,
-			points[0] - dir * collision_width
+			line_points[0] + dir * collision_width,
+			line_points[1] + dir * collision_width,
+			line_points[1] - dir * collision_width,
+			line_points[0] - dir * collision_width
 		])
 		return
 	else:
 		 # Создаем полигон
 		var polygon = PackedVector2Array()
 	# Верхняя часть полигона
-		for i in range(points.size()):
+		for i in range(line_points.size()):
 			var dir: Vector2
 			if i == 0:
-				dir = (points[1] - points[0]).normalized().orthogonal()
+				dir = (line_points[1] - line_points[0]).normalized().orthogonal()
 			elif i == points.size() - 1:
-				dir = (points[i] - points[i-1]).normalized().orthogonal()
+				dir = (line_points[i] - line_points[i-1]).normalized().orthogonal()
 			else:
-				var prev_dir = (points[i] - points[i-1]).normalized()
-				var next_dir = (points[i+1] - points[i]).normalized()
+				var prev_dir = (line_points[i] - line_points[i-1]).normalized()
+				var next_dir = (line_points[i+1] - line_points[i]).normalized()
 				dir = (prev_dir + next_dir).normalized().orthogonal()
-			polygon.append(points[i] + dir * collision_width)
+			polygon.append(line_points[i] + dir * collision_width)
 		# Нижняя часть полигона (в обратном порядке)
-		for i in range(points.size() - 1, -1, -1):
+		for i in range(line_points.size() - 1, -1, -1):
 			var dir: Vector2
 			if i == 0:
-				dir = (points[1] - points[0]).normalized().orthogonal()
-			elif i == points.size() - 1:
-				dir = (points[i] - points[i-1]).normalized().orthogonal()
+				dir = (line_points[1] - line_points[0]).normalized().orthogonal()
+			elif i == line_points.size() - 1:
+				dir = (line_points[i] - line_points[i-1]).normalized().orthogonal()
 			else:
-				var prev_dir = (points[i] - points[i-1]).normalized()
-				var next_dir = (points[i+1] - points[i]).normalized()
+				var prev_dir = (line_points[i] - line_points[i-1]).normalized()
+				var next_dir = (line_points[i+1] - line_points[i]).normalized()
 				dir = (prev_dir + next_dir).normalized().orthogonal()
-			polygon.append(points[i] - dir * collision_width)
+			polygon.append(line_points[i] - dir * collision_width)
 		collision.polygon = polygon
 
 # Добавляем точку в ближайшем месте на линии
-func add_point_at_position(position: Vector2):
-	connection.add_point_at_position(position)
+func add_point_at_position(point_position: Vector2):
+	connection.add_point_at_position(point_position)

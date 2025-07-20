@@ -24,9 +24,9 @@ func initialize(from: Node2D, to: Node2D):
 	to_achievement = to
 	update_connection()
 
-func update_end_point(achievement: Node2D, position: Vector2):
+func update_end_point(achievement: Node2D, end_position: Vector2):
 	to_achievement = achievement
-	to_anchor = position if !achievement else position - achievement.global_position
+	to_anchor = end_position if !achievement else end_position - achievement.global_position
 	#update_connection()
 
 func update_connection():
@@ -71,16 +71,24 @@ func update_boundary_points():
 	var start_rect = get_sprite_global_rect(start_sprite)
 	var end_rect = get_sprite_global_rect(end_sprite)
 	
+	
+	var point_after_start = to_achievement.global_position
+	var point_before_start = from_achievement.global_position
+	
+	if line.get_point_count() > 2:
+		point_after_start = line.get_point_position(1)
+		point_before_start = line.get_point_position(line.get_point_count() - 2)
+	
 	# Рассчитываем точки на границах прямоугольников
 	var start_point = calculate_boundary_point(
 		from_achievement.global_position,
-		to_achievement.global_position,
+		point_after_start,
 		start_rect
 	)
 	
 	var end_point = calculate_boundary_point(
 		to_achievement.global_position,
-		from_achievement.global_position,
+		point_before_start,
 		end_rect
 	)
 	
@@ -106,11 +114,11 @@ func update_boundary_points():
 	line.generate_collision()
 
 # Добавление новой точки
-func add_point_at_position(position: Vector2):
+func add_point_at_position(point_position: Vector2):
 	# Создаем экземпляр точки
 	var point_scene = preload("res://scenes/connection_point.tscn")
 	var point = point_scene.instantiate()
-	point.global_position = position
+	point.global_position = point_position
 	point.connection = self
 	point.position_changed.connect(_on_point_position_changed)
 	
@@ -118,10 +126,11 @@ func add_point_at_position(position: Vector2):
 	bones_container.add_child(point)
 	
 	# Определяем индекс для вставки в линию
-	var insert_index = find_closest_segment_index(position)
+	var insert_index = find_closest_segment_index(point_position)
 	
 	# Добавляем точку в линию
-	line.add_point(position, insert_index)
+	bones_container.move_child(point, insert_index - 1)  # Затем перемещаем на нужную позицию
+	line.add_point(point_position, insert_index)
 	
 	# Обновляем соединение
 	update_connection()
@@ -146,7 +155,7 @@ func remove_point(point: Node2D):
 		update_connection()
 
 # Поиск ближайшего сегмента для вставки
-func find_closest_segment_index(position: Vector2) -> int:
+func find_closest_segment_index(point_position: Vector2) -> int:
 	var points = line.get_points()
 	if points.size() < 2:
 		return 1
@@ -158,8 +167,8 @@ func find_closest_segment_index(position: Vector2) -> int:
 		var segment_start = points[i]
 		var segment_end = points[i + 1]
 		
-		var closest = Geometry2D.get_closest_point_to_segment(position, segment_start, segment_end)
-		var distance = position.distance_to(closest)
+		var closest = Geometry2D.get_closest_point_to_segment(point_position, segment_start, segment_end)
+		var distance = point_position.distance_to(closest)
 		
 		if distance < min_distance:
 			min_distance = distance
@@ -239,6 +248,14 @@ func calculate_boundary_point(from: Vector2, to: Vector2, rect: Rect2) -> Vector
 func _on_point_position_changed():
 	update_connection()
 
+func is_mouse_over_point():
+	for i in range(0, bones_container.get_child_count()):
+		var bone = bones_container.get_child(i)
+		if bone.is_mouse_over() == true:
+			return true
+	return false
+
+
 # Сохранение данных связи
 func save_data() -> Dictionary:
 	var data = {
@@ -262,5 +279,5 @@ func load_data(data: Dictionary):
 	from_anchor = Vector2(data["from_anchor"][0], data["from_anchor"][1])
 	to_anchor = Vector2(data["to_anchor"][0], data["to_anchor"][1])
 	
-	for bone_data in data["bones"]:
-		var bone_position = Vector2(bone_data["position"][0], bone_data["position"][1])
+	#for bone_data in data["bones"]:
+		#var bone_position = Vector2(bone_data["position"][0], bone_data["position"][1])
