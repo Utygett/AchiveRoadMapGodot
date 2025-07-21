@@ -9,6 +9,7 @@ var tile_width = 20
 var tile_height = 15
 var dragged_achievement = null
 
+
 func _ready():
 	# 1. Получаем данные из TileMapLayer
 	var tile_set = grid_background.tile_set

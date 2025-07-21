@@ -15,14 +15,30 @@ var base_scale = Vector2.ONE  # Сохраняем базовый размер
 var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 
 
+
 func _ready() -> void:
 	z_index = 15
+	var http_request = $HTTPRequest
+	http_request.request("http://127.0.0.1:8000/players")
+
+func _on_http_request_request_completed(result, response_code, headers, body):
+	if response_code == 200:
+		var json = JSON.new()
+		json.parse(body.get_string_from_utf8())
+		var data = json.get_data()
+		print("Данные игроков: ", data["players"])
+	else:
+		print("Ошибка: ", response_code)
+
+
 
 # Инициализация соединения
 func initialize(from: Node2D, to: Node2D):
 	from_achievement = from
 	to_achievement = to
 	update_connection()
+
+
 
 func update_end_point(achievement: Node2D, end_position: Vector2):
 	to_achievement = achievement
