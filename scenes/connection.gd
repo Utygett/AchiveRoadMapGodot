@@ -15,21 +15,13 @@ var base_scale = Vector2.ONE  # Сохраняем базовый размер
 var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 
 
-
+@onready var connection = preload("res://scenes/network_connection.tscn")
 func _ready() -> void:
 	z_index = 15
-	var http_request = $HTTPRequest
-	http_request.request("http://127.0.0.1:8000/players")
-
-func _on_http_request_request_completed(result, response_code, headers, body):
-	if response_code == 200:
-		var json = JSON.new()
-		json.parse(body.get_string_from_utf8())
-		var data = json.get_data()
-		print("Данные игроков: ", data["players"])
-	else:
-		print("Ошибка: ", response_code)
-
+	
+	var conn_instance = connection.instantiate()
+	add_child(conn_instance)
+	conn_instance.save_map("Math beginner", 20, 15, "")
 
 
 # Инициализация соединения

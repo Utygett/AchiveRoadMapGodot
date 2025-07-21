@@ -24,9 +24,3 @@ texture = ExtResource("2_nm06n")
 
 [node name="Bones" type="Node2D" parent="."]
 unique_name_in_owner = true
-
-[node name="HTTPRequest" type="HTTPRequest" parent="."]
-use_threads = true
-max_redirects = 12
-
-[connection signal="request_completed" from="HTTPRequest" to="." method="_on_http_request_request_completed"]

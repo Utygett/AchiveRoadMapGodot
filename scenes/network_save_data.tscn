@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://wjgnoy7osofq"]
+
+[ext_resource type="Script" uid="uid://bfk3i0cnrvrjv" path="res://scenes/network_save_data.gd" id="1_cf5ji"]
+
+[node name="NetworkSaveData" type="Node"]
+script = ExtResource("1_cf5ji")

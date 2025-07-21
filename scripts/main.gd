@@ -8,7 +8,7 @@ extends Node2D
 var tile_width = 20
 var tile_height = 15
 var dragged_achievement = null
-
+var achievement_map_name = "Math beginner"
 
 func _ready():
 	# 1. Получаем данные из TileMapLayer
