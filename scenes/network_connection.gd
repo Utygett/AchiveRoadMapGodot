@@ -25,7 +25,7 @@ func save_map(title: String, width: int, height: int, bg_url: String):
 	if error != OK:
 		push_error("An error occurred in the HTTP request.")
 
-func _on_request_completed(result, response_code, headers, body):
+func _on_request_completed(_result, response_code, _headers, body):
 	if response_code == 200:
 		var json = JSON.new()
 		json.parse(body.get_string_from_utf8())
@@ -57,7 +57,7 @@ func add_achievement(map_id: int, title: String, position: Vector2, rect: Rect2,
 
 # Добавление связи между достижениями
 func add_connection(map_id: int, from_id: int, to_id: int, points: Array):
-	var url = "http://localhost:8000/maps/%d/connections/" % map_id
+	var url = "http://127.0.0.1:8000/maps/%d/connections/" % map_id
 	var headers = ["Content-Type: application/json"]
 	
 	# Преобразование точек в нужный формат

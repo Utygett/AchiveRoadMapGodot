@@ -4,11 +4,13 @@ extends Node2D
 @onready var line: Line2D = %Line
 @onready var arrow: Sprite2D = %Arrow
 @onready var bones_container: Node2D = %Bones
+@onready var connection = preload("res://scenes/network_connection.tscn")
 
 var from_achievement: Node2D = null
 var to_achievement: Node2D = null
 var from_anchor: Vector2 = Vector2.ZERO
 var to_anchor: Vector2 = Vector2.ZERO
+
 
 var mouse_over = false
 var base_scale = Vector2.ONE  # Сохраняем базовый размер
@@ -25,8 +27,18 @@ func _ready() -> void:
 func initialize(from: Node2D, to: Node2D):
 	from_achievement = from
 	to_achievement = to
+	var conn_instance = connection.instantiate()
+	add_child(conn_instance)
+	 
+	conn_instance.add_connection(1, from_achievement.achieve_id, to_achievement.achieve_id, Array())
+	await conn_instance.request_finished
 	update_connection()
 
+# Инициализация соединения
+func initialize_from_data(from: Node2D, to: Node2D):
+	from_achievement = from
+	to_achievement = to
+	update_connection()
 
 
 func update_end_point(achievement: Node2D, end_position: Vector2):

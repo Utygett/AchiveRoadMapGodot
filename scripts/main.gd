@@ -6,6 +6,7 @@ extends Node2D
 @onready var connection_manager: Node = $ConnectionManager
 
 @onready var connection = preload("res://scenes/network_connection.tscn")
+@onready var connection_load = preload("res://scenes/network_save_data.tscn")
 
 var tile_width = 20
 var tile_height = 15
@@ -41,21 +42,14 @@ func _ready():
 	
 	
 		# Добавляем тестовые достижения
-	add_achievement(Vector2(500, 300), "Сумма до 10", "res://assets/Sum_to_10.png")
-	add_achievement(Vector2(700, 300), "Сравнение", "res://assets/comprassion.png")
+	#add_achievement(Vector2(500, 300), "Сумма до 10", "res://assets/Sum_to_10.png")
+	#add_achievement(Vector2(700, 300), "Сравнение", "res://assets/comprassion.png")
 	
-	var conn_instance = connection.instantiate()
-	add_child(conn_instance) 
-	for i in range(achievement_container.get_child_count()):
-		var achive = achievement_container.get_child(i) as Achievment
-		conn_instance.achievement_queue.push_back({
-			"player_id": 1,
-			"name": achive.achievement_name,
-			"position": achive.global_position,
-			"rect": achive.sprite_2d.get_rect(),
-			"icon_path": achive.icon.resource_path
-		})
-	conn_instance.release_achive_queue()
+	var conn_instance = connection_load.instantiate()
+	add_child(conn_instance)
+	 
+	conn_instance.load_map(1)
+	
 		#conn_instance.add_achievement(1, achive.achievement_name, achive.global_position, achive.sprite_2d.get_rect(), achive.icon.resource_path)
 	
 	
@@ -106,11 +100,12 @@ func create_map_borders(size: Vector2):
 	add_child(border_line)
 
 # В основной скрипт карты (Map.gd)
-func add_achievement(achieve_position: Vector2, achieve_name: String, icon_path: String):
+func add_achievement(id:int, achieve_position: Vector2, achieve_name: String, icon_path: String):
 	var achievement_scene = preload("res://scenes/achievement.tscn")
 	var new_achievement = achievement_scene.instantiate()
 	
 	# Настройка достижения
+	new_achievement.achieve_id = id
 	new_achievement.position = achieve_position
 	new_achievement.achievement_name = achieve_name
 	new_achievement.icon = load(icon_path)
@@ -118,6 +113,19 @@ func add_achievement(achieve_position: Vector2, achieve_name: String, icon_path:
 	
 	# Добавляем в контейнер
 	achievement_container.add_child(new_achievement)
+
+func add_connection(from_id: int, to_id: int, points: Array):
+	var achieve_from = get_achieve_from_id(from_id)
+	var achieve_to = get_achieve_from_id(to_id)
+	connection_manager.start_connection(achieve_from)
+	connection_manager.end_connection(achieve_to, true)
+
+func get_achieve_from_id(achieve_id: int):
+	for i in range(achievement_container.get_child_count()):
+		var achive = achievement_container.get_child(i) as Achievment
+		if achive.achieve_id == achieve_id:
+			return achive
+	return null 
 
 # Функция для обработки перетаскивания
 func _on_achievement_dragging(is_dragging, achievement):
