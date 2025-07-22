@@ -1,4 +1,4 @@
-# achievement.gd
+class_name  Achievment
 extends Node2D
 # Настройки
 @export var achievement_name: String = "Новое достижение"

@@ -15,13 +15,10 @@ var base_scale = Vector2.ONE  # Сохраняем базовый размер
 var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 
 
-@onready var connection = preload("res://scenes/network_connection.tscn")
+
 func _ready() -> void:
 	z_index = 15
-	
-	var conn_instance = connection.instantiate()
-	add_child(conn_instance)
-	conn_instance.save_map("Math beginner", 20, 15, "")
+
 
 
 # Инициализация соединения

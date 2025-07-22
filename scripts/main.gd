@@ -5,6 +5,8 @@ extends Node2D
 @onready var main_camera: Camera2D = %MainCamera
 @onready var connection_manager: Node = $ConnectionManager
 
+@onready var connection = preload("res://scenes/network_connection.tscn")
+
 var tile_width = 20
 var tile_height = 15
 var dragged_achievement = null
@@ -39,10 +41,24 @@ func _ready():
 	
 	
 		# Добавляем тестовые достижения
-	add_achievement(Vector2(200, 150), "Счёт до 20", "res://assets/count_to_20.png")
 	add_achievement(Vector2(500, 300), "Сумма до 10", "res://assets/Sum_to_10.png")
 	add_achievement(Vector2(700, 300), "Сравнение", "res://assets/comprassion.png")
-
+	
+	var conn_instance = connection.instantiate()
+	add_child(conn_instance) 
+	for i in range(achievement_container.get_child_count()):
+		var achive = achievement_container.get_child(i) as Achievment
+		conn_instance.achievement_queue.push_back({
+			"player_id": 1,
+			"name": achive.achievement_name,
+			"position": achive.global_position,
+			"rect": achive.sprite_2d.get_rect(),
+			"icon_path": achive.icon.resource_path
+		})
+	conn_instance.release_achive_queue()
+		#conn_instance.add_achievement(1, achive.achievement_name, achive.global_position, achive.sprite_2d.get_rect(), achive.icon.resource_path)
+	
+	
 func create_map_borders(size: Vector2):
 	# Создаем 4 коллайдера по краям карты
 	var border = StaticBody2D.new()
