@@ -1,0 +1,21 @@
+[gd_scene load_steps=5 format=3 uid="uid://624x5gajd5vn"]
+
+[ext_resource type="Script" uid="uid://cxewlknwlpdhe" path="res://scenes/server_requests.gd" id="1_gjeey"]
+[ext_resource type="Script" uid="uid://cn8773e1kdjaw" path="res://scenes/network_manager.gd" id="2_u06m0"]
+[ext_resource type="Script" uid="uid://dq4fhqdeva0na" path="res://scenes/achievement_api.gd" id="3_72o88"]
+[ext_resource type="Script" uid="uid://c2ua5stgqjgvf" path="res://scenes/connection_api.gd" id="4_4ub0y"]
+
+[node name="ServerRequests" type="Node"]
+script = ExtResource("1_gjeey")
+
+[node name="NetworkManager" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("2_u06m0")
+
+[node name="AchievementAPI" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("3_72o88")
+
+[node name="ConnectionAPI" type="Node" parent="."]
+unique_name_in_owner = true
+script = ExtResource("4_4ub0y")

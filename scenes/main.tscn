@@ -1,10 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://cusb8ua2e11wl"]
+[gd_scene load_steps=9 format=3 uid="uid://cusb8ua2e11wl"]
 
 [ext_resource type="Script" uid="uid://c3nvhwq51puxa" path="res://scripts/main.gd" id="1_o5qli"]
 [ext_resource type="PackedScene" uid="uid://cmd84r45d7iu1" path="res://ui/editor_ui.tscn" id="2_0wfyh"]
 [ext_resource type="Texture2D" uid="uid://cy5ylymsp4b5y" path="res://assets/background.png" id="2_jyhfs"]
 [ext_resource type="Script" uid="uid://dsy3fa6jcnh3v" path="res://scenes/main_camera.gd" id="3_tbgi4"]
 [ext_resource type="PackedScene" uid="uid://tx2snkb0h4hp" path="res://scenes/connection_manager.tscn" id="5_tbgi4"]
+[ext_resource type="PackedScene" uid="uid://624x5gajd5vn" path="res://scenes/server_requests.tscn" id="6_tefeu"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_tbgi4"]
 texture = ExtResource("2_jyhfs")
@@ -53,5 +54,7 @@ filters = PackedStringArray("*.png", "*.jpg", "*.jpeg", "*.webp")
 
 [node name="ConnectionManager" parent="." instance=ExtResource("5_tbgi4")]
 unique_name_in_owner = true
+
+[node name="ServerRequests" parent="." groups=["server_request"] instance=ExtResource("6_tefeu")]
 
 [connection signal="file_selected" from="FileDialog" to="." method="_on_file_dialog_file_selected"]

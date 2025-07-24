@@ -40,6 +40,8 @@ func _ready():
 	area_2d.input_event.connect(_on_area_input_event)
 	area_2d.mouse_entered.connect(_on_area_mouse_entered)
 	area_2d.mouse_exited.connect(_on_area_mouse_exited)
+	
+	
 
 func _on_area_input_event(viewport,event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -76,6 +78,7 @@ func _on_area_input_event(viewport,event, _shape_idx):
 			var drop_tween = create_tween()
 			drop_tween.tween_property(self, "scale", base_scale * (Vector2(1.1, 1.1) if mouse_over else Vector2.ONE), 0.2)
 			drop_tween.parallel().tween_property(self, "modulate", base_modulate, 0.2)
+			send_update_position_to_server()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		show_context_menu()
 
@@ -152,3 +155,7 @@ func update_connection():
 		conn.update_connection()
 	for conn in connections_to:
 		conn.update_connection()
+
+func send_update_position_to_server():
+	var server = get_tree().get_first_node_in_group("server_request")
+	server.update_achievement(self)
