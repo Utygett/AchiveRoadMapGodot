@@ -26,7 +26,7 @@ var is_connection_started = false
 var connections_from: Array = []  # Исходящие связи
 var connections_to: Array = []  # Входящие связи
 var achieve_id = 0
-
+var map_id = 0
 
 func _ready():
 	# Устанавливаем иконку

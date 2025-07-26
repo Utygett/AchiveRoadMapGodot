@@ -2,27 +2,44 @@ extends Node
 @onready var network_manager: Node = %NetworkManager
 @onready var achievement_api: Node = %AchievementAPI
 @onready var connection_api: Node = %ConnectionAPI
+@onready var map_api: Node = %MapAPI
+
+# Добавляем перечисление типов запросов
+enum RequestType {
+	GET_MAP,
+	CREATE_MAP,
+	UPDATE_MAP,
+	DELETE_MAP,
+	CREATE_ACHIEVEMENT,
+	UPDATE_ACHIEVEMENT,
+	DELETE_ACHIEVEMENT,
+	CREATE_CONNECTION,
+	UPDATE_CONNECTION,
+	DELETE_CONNECTION
+}
 
 func _ready():
-	network_manager.connect("request_success", _on_network_success)
-	network_manager.connect("request_error", _on_network_error)
+	network_manager.connect("request_completed", _on_request_completed)
+	network_manager.connect("request_failed", _on_request_failed)
 
-func _on_network_success(data):
-	print("Operation successful:", data)
-	
-	# Обновляем UI или игровые объекты
-	if data.has("id") and data.has("map_id"):
-		# Обновление карты
-		pass
-	elif data.has("id") and data.has("achievement_id"):
-		# Обновление соединения
-		pass
+func _on_request_completed(request_id, type, data):
+	print("Request", request_id, "completed. type:", type)
+	match type:
+		RequestType.GET_MAP:
+			map_api.on_map_data_loaded(data)
 
-func _on_network_error(error_msg):
-	print("Network error:", error_msg)
+func _on_request_failed(request_id, error):
+	print("Request", request_id, "failed:", error)
 
 func update_achievement(achievement):
 	achievement_api.update_achievement_data(achievement)
-	
+
+func create_connection(map_id: int, from_id: int, to_id: int):
+	connection_api.create_connection(map_id, from_id, to_id)
+
 func update_connection(connection):
-	achievement_api.update_connection_data(connection)
+	connection_api.update_connection_data(connection)
+
+func load_map_data(id:int):
+	map_api.load_map_data(id)
+	

@@ -11,6 +11,7 @@ func end_connection(to: Node2D, from_data:bool = false):
 	if connection_from and to:
 		#Создаем связь 
 		var active_connection = connection_scene.instantiate()
+		active_connection.map_id = connection_from.map_id
 		get_tree().current_scene.add_child(active_connection)
 		
 		# Регистрируем достижения в связи 
@@ -23,6 +24,7 @@ func end_connection(to: Node2D, from_data:bool = false):
 		to.add_incoming_connection(active_connection)
 		# Сбрасываем состояние
 		cancel_connection()
+		return active_connection
 		
 # Сбрасываем состояние
 func cancel_connection():

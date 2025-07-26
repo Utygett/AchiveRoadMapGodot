@@ -1,7 +1,7 @@
 class_name  ConnectionPoint
 extends Node2D
 
-signal position_changed()
+signal position_changed_finished()
 
 var drag = false
 var drag_offset = Vector2.ZERO
@@ -14,7 +14,6 @@ func _ready():
 	$Area2D.mouse_entered.connect(_on_mouse_entered)
 	$Area2D.mouse_exited.connect(_on_mouse_exited)
 	z_index = 15
-	#$Area2D.top_level = true
 
 func _on_mouse_entered():
 	mouse_over = true
@@ -26,6 +25,7 @@ func _on_mouse_exited():
 
 func _on_area_input_event(_viewport, event, _shape_idx):
 	if event is InputEventMouseButton:
+		var camera = get_tree().get_first_node_in_group("main_camera")
 		if event.button_index == MOUSE_BUTTON_LEFT:
 			if event.pressed:
 				print("Клик по точке ЛЕВОЙ!")
@@ -36,16 +36,16 @@ func _on_area_input_event(_viewport, event, _shape_idx):
 				drag = true
 				drag_offset = global_position - get_global_mouse_position()
 				# Отключаем перетаскивание камеры
-				var camera = get_tree().get_first_node_in_group("main_camera")
 				if camera:
 					camera.disable_camera_drag()
 				# Поднимаем точку наверх
 			else:
 				# Конец перетаскивания
 				drag = false
+				if camera:
+					camera.enable_camera_drag()
 				# Сообщаем соединению об обновлении
-				if connection:
-					connection.update_connection()
+				position_changed_finished.emit()
 		# Удаление по правому клику
 		if event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 			if connection:
@@ -58,4 +58,5 @@ func is_mouse_over():
 func _process(_delta):
 	if drag:
 		global_position = get_global_mouse_position() + drag_offset
-		position_changed.emit()
+		if connection:
+			connection.update_connection()
