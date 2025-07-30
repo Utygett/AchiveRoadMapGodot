@@ -1,8 +1,15 @@
 extends Line2D
 
+signal remove_connection()
+
 @export var collision_width: float = 10.0  # Ширина области коллизии
 @onready var area: Area2D = %Area2D
 @onready var connection: Node2D = $".."
+
+enum MenuItems {
+  DELETE,
+}
+
 
 func _ready() -> void:
 	area.mouse_entered.connect(_on_mouse_entered)
@@ -20,13 +27,10 @@ func _on_input_event(_viewport, event, _shape_idx):
 		if connection.is_mouse_over_point():
 			return
 		if event.button_index == MOUSE_BUTTON_LEFT:
-			print("Клик по линии ЛЕВОЙ!")
 			var click_position = to_local(event.global_position)
 			add_point_at_position(click_position)
 		elif event.button_index == MOUSE_BUTTON_RIGHT:
-			print("Клик по линии ПРАВОЙ!")
-
-
+			show_context_menu()
 
 func generate_collision():
 	var line_points = get_points()
@@ -82,3 +86,22 @@ func generate_collision():
 # Добавляем точку в ближайшем месте на линии
 func add_point_at_position(point_position: Vector2):
 	connection.add_point_at_position(point_position)
+
+func show_context_menu():
+	var menu = PopupMenu.new()
+	# Добавление пунктов меню
+	menu.add_item("Удалить связь", MenuItems.DELETE)
+	# Добавляем к корневому viewport
+	get_viewport().add_child(menu)
+	# Получаем позицию мыши с учетом камеры
+	var mouse_pos = get_viewport().get_mouse_position()
+	menu.popup(Rect2(mouse_pos, Vector2.ZERO))
+	
+	# Обработка выбора и автоматическое удаление
+	menu.id_pressed.connect(_on_menu_item_selected)
+	menu.popup_hide.connect(menu.queue_free)
+
+func _on_menu_item_selected(id):
+	match id:
+		MenuItems.DELETE:
+			remove_connection.emit()

@@ -20,16 +20,16 @@ func update_connection_data(connection):
 	
 	update_connection(connection.connection_id, {"points": points_data})
 
-func _delete_connection_from_server(connection_id: int):
-	delete_connection(connection_id)
+func delete_connection_from_server(connection):
+	delete_connection(connection.connection_id)
 
 # Добавление связи между достижениями
 func create_connection(map_id: int, from_id: int, to_id: int):
-	var url = "/maps/%d/connections/" % map_id
+	var url = "/maps/%d/connections" % map_id
 	
-	var body = JSON.stringify({
+	var body = {
 		"from_achievement_id": from_id,
 		"to_achievement_id": to_id,
-	})
+	}
 	
 	network_manager.add_request(server_requests.RequestType.CREATE_CONNECTION, HTTPClient.METHOD_POST, url, body)

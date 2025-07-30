@@ -20,6 +20,7 @@ var map_id = -1
 
 func _ready() -> void:
 	z_index = 15
+	line.connect("remove_connection", remove_connection)
 
 
 
@@ -269,3 +270,9 @@ func is_mouse_over_point():
 # Обработчик изменения позиции точки
 func _on_point_position_changed_finished():
 	conn_server_api.update_connection_data()
+
+func remove_connection():
+	conn_server_api.remove_connection_on_server()
+	from_achievement.remove_outgoing_connection(self)
+	to_achievement.remove_incoming_connection(self)
+	queue_free()

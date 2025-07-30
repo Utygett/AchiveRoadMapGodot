@@ -40,6 +40,9 @@ func create_connection(map_id: int, from_id: int, to_id: int):
 func update_connection(connection):
 	connection_api.update_connection_data(connection)
 
+func remove_connection(connection):
+	connection_api.delete_connection_from_server(connection)
+
 func load_map_data(id:int):
 	map_api.load_map_data(id)
 	
