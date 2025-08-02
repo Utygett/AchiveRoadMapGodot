@@ -4,6 +4,7 @@ extends Node2D
 @onready var achievement_container: Node2D = %AchievementContainer
 @onready var main_camera: Camera2D = %MainCamera
 @onready var connection_manager: Node = $ConnectionManager
+@onready var editor_ui: CanvasLayer = %EditorUI
 
 var tile_width = 20
 var tile_height = 15
@@ -12,6 +13,8 @@ var achievement_map_name = "Math beginner"
 var map_id = -1
 
 func _ready():
+	editor_ui.connect("achive_created", create_achive_from_dictionary)
+	
 	# 1. Получаем данные из TileMapLayer
 	var tile_set = grid_background.tile_set
 	var source_id = tile_set.get_source_id(0)
@@ -127,3 +130,10 @@ func get_achieve_from_id(achieve_id: int):
 func _on_achievement_dragging(is_dragging, achievement):
 	dragged_achievement = achievement if is_dragging else null
 	main_camera.is_dragging_object = is_dragging
+
+func create_achive_from_dictionary(data: Dictionary):
+	var name = data.name
+	var img_url = data.image_url if data.image_url else "res://assets/no_image.png"
+	var description = data.description
+	var timestamp = data.timestamp
+	add_achievement(1, main_camera.global_position, name, img_url)

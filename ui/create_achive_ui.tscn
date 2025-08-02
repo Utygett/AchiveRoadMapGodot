@@ -11,6 +11,7 @@ font_color = Color(0.796078, 1, 1, 1)
 font_size = 24
 
 [node name="CreateAchiveUI" type="CanvasLayer"]
+process_mode = 3
 script = ExtResource("1_g5ghc")
 
 [node name="Panel" type="Panel" parent="."]
@@ -39,7 +40,8 @@ size_flags_vertical = 0
 text = "Создание достижения"
 label_settings = SubResource("LabelSettings_g5ghc")
 horizontal_alignment = 1
-visible_ratio = -0.0526316
+visible_characters = 0
+visible_ratio = 0.0
 
 [node name="Label2" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
 layout_mode = 2
@@ -47,6 +49,7 @@ text = "Наименование"
 label_settings = SubResource("LabelSettings_5lsuw")
 
 [node name="LEName" type="LineEdit" parent="Panel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label4" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
@@ -55,6 +58,7 @@ text = "Url изображения"
 label_settings = SubResource("LabelSettings_5lsuw")
 
 [node name="LEImageUrl" type="LineEdit" parent="Panel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 
 [node name="Label3" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
@@ -62,14 +66,10 @@ layout_mode = 2
 text = "Описание"
 label_settings = SubResource("LabelSettings_5lsuw")
 
-[node name="RichTextLabel" type="RichTextLabel" parent="Panel/ScrollContainer/VBoxContainer"]
-custom_minimum_size = Vector2(200, 200)
+[node name="TEDescription" type="TextEdit" parent="Panel/ScrollContainer/VBoxContainer"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(0, 120)
 layout_mode = 2
-size_flags_horizontal = 3
-text = "dfdfdsfdsfddsfsdfsdfdsf
-
-"
-autowrap_mode = 2
 
 [node name="BTCreate" type="Button" parent="Panel"]
 layout_mode = 1
