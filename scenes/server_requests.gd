@@ -31,6 +31,9 @@ func _on_request_completed(request_id, type, data):
 func _on_request_failed(request_id, error):
 	print("Request", request_id, "failed:", error)
 
+func create_achievement(achievement):
+	achievement_api.create_achievement(achievement)
+
 func update_achievement(achievement):
 	achievement_api.update_achievement_data(achievement)
 

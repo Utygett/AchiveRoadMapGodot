@@ -159,3 +159,7 @@ func update_connection():
 func send_update_position_to_server():
 	var server = get_tree().get_first_node_in_group("server_request")
 	server.update_achievement(self)
+
+func send_create_achievement():
+	var server = get_tree().get_first_node_in_group("server_request")
+	server.create_achievement(self)

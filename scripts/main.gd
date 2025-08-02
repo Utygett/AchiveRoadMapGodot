@@ -5,6 +5,7 @@ extends Node2D
 @onready var main_camera: Camera2D = %MainCamera
 @onready var connection_manager: Node = $ConnectionManager
 @onready var editor_ui: CanvasLayer = %EditorUI
+@onready var uid_manager: Node = $UIDManager
 
 var tile_width = 20
 var tile_height = 15
@@ -108,6 +109,7 @@ func add_achievement(id:int, achieve_position: Vector2, achieve_name: String, ic
 	new_achievement.connection_manager = connection_manager
 	# Добавляем в контейнер
 	achievement_container.add_child(new_achievement)
+	return new_achievement
 
 func add_connection(id: int, from_id: int, to_id: int, points: Array):
 	var achieve_from = get_achieve_from_id(from_id)
@@ -136,4 +138,5 @@ func create_achive_from_dictionary(data: Dictionary):
 	var img_url = data.image_url if data.image_url else "res://assets/no_image.png"
 	var description = data.description
 	var timestamp = data.timestamp
-	add_achievement(1, main_camera.global_position, name, img_url)
+	var achive = add_achievement(uid_manager.generate_temp_id(), main_camera.global_position, name, img_url)
+	achive.
