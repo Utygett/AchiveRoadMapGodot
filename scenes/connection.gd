@@ -4,25 +4,39 @@ extends Node2D
 @onready var line: Line2D = %Line
 @onready var arrow: Sprite2D = %Arrow
 @onready var bones_container: Node2D = %Bones
+@onready var conn_server_api: Node = %ConnServerApi
 
 var from_achievement: Node2D = null
 var to_achievement: Node2D = null
 var from_anchor: Vector2 = Vector2.ZERO
 var to_anchor: Vector2 = Vector2.ZERO
 
+
 var mouse_over = false
 var base_scale = Vector2.ONE  # Сохраняем базовый размер
 var base_modulate = Color.WHITE  # Сохраняем базовый цвет
-
+var connection_id = 0
+var map_id = -1
 
 func _ready() -> void:
 	z_index = 15
+	line.connect("remove_connection", remove_connection)
+
+
 
 # Инициализация соединения
 func initialize(from: Node2D, to: Node2D):
 	from_achievement = from
 	to_achievement = to
+	conn_server_api.create_connection_on_server()
 	update_connection()
+
+# Инициализация соединения
+func initialize_from_data(from: Node2D, to: Node2D):
+	from_achievement = from
+	to_achievement = to
+	update_connection()
+
 
 func update_end_point(achievement: Node2D, end_position: Vector2):
 	to_achievement = achievement
@@ -114,13 +128,13 @@ func update_boundary_points():
 	line.generate_collision()
 
 # Добавление новой точки
-func add_point_at_position(point_position: Vector2):
+func add_point_at_position(point_position: Vector2, load_from_server:bool = false):
 	# Создаем экземпляр точки
 	var point_scene = preload("res://scenes/connection_point.tscn")
 	var point = point_scene.instantiate()
 	point.global_position = point_position
 	point.connection = self
-	point.position_changed.connect(_on_point_position_changed)
+	point.position_changed_finished.connect(_on_point_position_changed_finished)
 	
 	# Добавляем в контейнер костей
 	bones_container.add_child(point)
@@ -134,6 +148,8 @@ func add_point_at_position(point_position: Vector2):
 	
 	# Обновляем соединение
 	update_connection()
+	if load_from_server == false:
+		conn_server_api.update_connection_data()
 
 # Удаление точки
 func remove_point(point: Node2D):
@@ -143,7 +159,6 @@ func remove_point(point: Node2D):
 		if line.get_point_position(i) == point.global_position:
 			point_index = i
 			break
-	
 	if point_index != -1:
 		# Удаляем точку из линии
 		line.remove_point(point_index)
@@ -153,6 +168,7 @@ func remove_point(point: Node2D):
 		
 		# Обновляем соединение
 		update_connection()
+	conn_server_api.update_connection_data()
 
 # Поиск ближайшего сегмента для вставки
 func find_closest_segment_index(point_position: Vector2) -> int:
@@ -244,10 +260,6 @@ func calculate_boundary_point(from: Vector2, to: Vector2, rect: Rect2) -> Vector
 	# Fallback: если не нашли пересечений, возвращаем центр прямоугольника
 	return rect.position + rect.size / 2
 
-# Обработчик изменения позиции точки
-func _on_point_position_changed():
-	update_connection()
-
 func is_mouse_over_point():
 	for i in range(0, bones_container.get_child_count()):
 		var bone = bones_container.get_child(i)
@@ -255,29 +267,12 @@ func is_mouse_over_point():
 			return true
 	return false
 
+# Обработчик изменения позиции точки
+func _on_point_position_changed_finished():
+	conn_server_api.update_connection_data()
 
-# Сохранение данных связи
-func save_data() -> Dictionary:
-	var data = {
-		"from": from_achievement.get_path(),
-		"to": to_achievement.get_path(),
-		"from_anchor": [from_anchor.x, from_anchor.y],
-		"to_anchor": [to_anchor.x, to_anchor.y],
-		"bones": []
-	}
-	
-	for bone in bones_container.get_children():
-		data["bones"].append({
-			"position": [bone.position.x, bone.position.y],
-			"global_position": [bone.global_position.x, bone.global_position.y]
-		})
-	
-	return data
-
-# Загрузка данных связи
-func load_data(data: Dictionary):
-	from_anchor = Vector2(data["from_anchor"][0], data["from_anchor"][1])
-	to_anchor = Vector2(data["to_anchor"][0], data["to_anchor"][1])
-	
-	#for bone_data in data["bones"]:
-		#var bone_position = Vector2(bone_data["position"][0], bone_data["position"][1])
+func remove_connection():
+	conn_server_api.remove_connection_on_server()
+	from_achievement.remove_outgoing_connection(self)
+	to_achievement.remove_incoming_connection(self)
+	queue_free()

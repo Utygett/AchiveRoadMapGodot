@@ -43,6 +43,7 @@ unique_name_in_owner = true
 
 [node name="EditorUI" parent="." instance=ExtResource("2_0wfyh")]
 unique_name_in_owner = true
+visible = false
 
 [node name="FileDialog" type="FileDialog" parent="."]
 title = "Open a File"

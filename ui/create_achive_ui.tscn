@@ -1,0 +1,102 @@
+[gd_scene load_steps=4 format=3 uid="uid://bax1t8ocevrsj"]
+
+[ext_resource type="Script" uid="uid://cg7ivtvkftcrv" path="res://scripts/ui/create_achive_ui.gd" id="1_g5ghc"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_g5ghc"]
+line_spacing = 0.0
+font_size = 32
+font_color = Color(0.796078, 1, 1, 1)
+
+[sub_resource type="LabelSettings" id="LabelSettings_5lsuw"]
+font_size = 24
+
+[node name="CreateAchiveUI" type="CanvasLayer"]
+script = ExtResource("1_g5ghc")
+
+[node name="Panel" type="Panel" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Label" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 0
+text = "Создание достижения"
+label_settings = SubResource("LabelSettings_g5ghc")
+horizontal_alignment = 1
+visible_ratio = -0.0526316
+
+[node name="Label2" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Наименование"
+label_settings = SubResource("LabelSettings_5lsuw")
+
+[node name="LEName" type="LineEdit" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label4" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Url изображения"
+label_settings = SubResource("LabelSettings_5lsuw")
+
+[node name="LEImageUrl" type="LineEdit" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+
+[node name="Label3" type="Label" parent="Panel/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+text = "Описание"
+label_settings = SubResource("LabelSettings_5lsuw")
+
+[node name="RichTextLabel" type="RichTextLabel" parent="Panel/ScrollContainer/VBoxContainer"]
+custom_minimum_size = Vector2(200, 200)
+layout_mode = 2
+size_flags_horizontal = 3
+text = "dfdfdsfdsfddsfsdfsdfdsf
+
+"
+autowrap_mode = 2
+
+[node name="BTCreate" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -31.0
+offset_right = 74.0
+grow_vertical = 0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(0, 34)
+text = "Создать"
+
+[node name="BTCancel" type="Button" parent="Panel"]
+layout_mode = 1
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -71.0
+offset_top = -31.0
+grow_horizontal = 0
+grow_vertical = 0
+scale = Vector2(2, 2)
+pivot_offset = Vector2(71, 34)
+text = "Отмена"
+
+[connection signal="pressed" from="Panel/BTCreate" to="." method="_on_bt_create_pressed"]
+[connection signal="pressed" from="Panel/BTCancel" to="." method="_on_bt_cancel_pressed"]
