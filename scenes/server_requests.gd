@@ -28,8 +28,8 @@ func _on_request_completed(request_id, type, data):
 		RequestType.GET_MAP:
 			map_api.on_map_data_loaded(data)
 
-func _on_request_failed(request_id, error):
-	print("Request", request_id, "failed:", error)
+func _on_request_failed(request_id, type, error):
+	print("Request: ", request_id, " Type: ", type, " failed:", error)
 
 func create_achievement(achievement):
 	achievement_api.create_achievement(achievement)

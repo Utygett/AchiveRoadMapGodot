@@ -27,10 +27,10 @@ var connections_from: Array = []  # Исходящие связи
 var connections_to: Array = []  # Входящие связи
 var achieve_id = 0
 var map_id = 0
-var client_uuid
+var client_uid = ""
 
 func _ready():
-	client_uuid = UuidManager.generate_uuid()
+	client_uid = UuidManager.generate_uuid()
 	# Устанавливаем иконку
 	sprite_2d.texture = icon
 	base_scale = scale

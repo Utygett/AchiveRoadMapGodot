@@ -5,7 +5,6 @@ extends Node2D
 @onready var main_camera: Camera2D = %MainCamera
 @onready var connection_manager: Node = $ConnectionManager
 @onready var editor_ui: CanvasLayer = %EditorUI
-@onready var uid_manager: Node = $UIDManager
 
 var tile_width = 20
 var tile_height = 15
