@@ -15,6 +15,10 @@ run/main_scene="uid://cusb8ua2e11wl"
 config/features=PackedStringArray("4.4", "Mobile")
 config/icon="res://icon.svg"
 
+[autoload]
+
+UuidManager="*res://scenes/uuid_manager.gd"
+
 [display]
 
 window/size/viewport_width=480

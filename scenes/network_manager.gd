@@ -4,7 +4,10 @@ class_name HTTPRequestQueue
 signal request_completed(request_id, type, body)
 signal request_failed(request_id, type, error)
 
+@onready var server_requests: Node = $".."
+
 var _queue = []  # Очередь запросов
+var _queue_witout_id = []  # Очередь запросов без айди, буду выполнены после получения айди
 var _current_request = null
 var _http_request = HTTPRequest.new()
 var _next_request_id = 1
@@ -17,12 +20,16 @@ func _ready():
 	_http_request.request_completed.connect(_on_HTTPRequest_request_completed)
 
 # Добавление запроса в очередь
-func add_request(type: int, method: HTTPClient.Method, url: String, data: Variant = null) -> int:
+func add_request(type: int, method: HTTPClient.Method, url: String, data: Variant = null, meta_data: Variant = null) -> int:
+	var tmp_id = 0
+	if meta_data:
+		tmp_id = meta_data.tmp_id
 	var request_id = _next_request_id
 	_next_request_id += 1
 	var new_url = BASE_URL + url
 	var request_data = { #TODO Добавить информацию в лог
 		"id": request_id,
+		"tmp_id": tmp_id,
 		"type": type,
 		"method": method,
 		"url": new_url,
@@ -30,7 +37,11 @@ func add_request(type: int, method: HTTPClient.Method, url: String, data: Varian
 		"timestamp": Time.get_unix_time_from_system()
 	}
 	
-	_queue.push_back(request_data)
+	if tmp_id == 0 || type == server_requests.RequestType.CREATE_ACHIEVEMENT:
+		_queue.push_back(request_data)
+	else:
+		_queue_witout_id.push_back(request_data)
+	
 	
 	# Если очередь не обрабатывается, запускаем обработку
 	if not _is_processing:

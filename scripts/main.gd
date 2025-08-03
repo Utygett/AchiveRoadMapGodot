@@ -138,5 +138,5 @@ func create_achive_from_dictionary(data: Dictionary):
 	var img_url = data.image_url if data.image_url else "res://assets/no_image.png"
 	var description = data.description
 	var timestamp = data.timestamp
-	var achive = add_achievement(uid_manager.generate_temp_id(), main_camera.global_position, name, img_url)
-	achive.
+	var achive = add_achievement(0, main_camera.global_position, name, img_url)
+	#achive.

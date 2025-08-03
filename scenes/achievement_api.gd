@@ -27,19 +27,22 @@ func _delete_achievement_from_server(achievement_id: int):
 #Добавление достижения на сервер
 func create_achievement(achievement):
 	#func create_achievement(map_id: int, title: String, position: Vector2, rect: Rect2, icon_url: String):
+	var meta_data = {
+		"tmp_id": achievement.id
+	}
 	var x = achievement.global_position.x
 	var y = achievement.global_position.y
 	var width = achievement.rect.size.x
 	var height = achievement.rect.size.y
 	var url = "/maps/%d/achievements/" % achievement.map_id
 	var headers = ["Content-Type: application/json"]
-	var body = JSON.stringify({
+	var body = {
 		"title": achievement.name,
 		"x": x,
 		"y": y,
 		"width": width,
 		"height": height,
 		"icon_url": achievement.icon.url
-	})
+	}
 	
-	network_manager.add_request(server_requests.RequestType.CREATE_ACHIEVEMENT, HTTPClient.METHOD_POST, url, body)
+	network_manager.add_request(server_requests.RequestType.CREATE_ACHIEVEMENT, HTTPClient.METHOD_POST, url, body, meta_data)
