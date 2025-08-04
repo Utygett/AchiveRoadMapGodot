@@ -130,6 +130,7 @@ func _on_menu_item_selected(id):
 		MenuItems.INFO:
 			print("Описание: ", description)
 		MenuItems.DELETE:
+			send_delete_achievement()
 			queue_free()
 		MenuItems.START_CONNECTION:  # Начать соединение
 			connection_manager.start_connection(self)
@@ -165,3 +166,7 @@ func send_update_position_to_server():
 func send_create_achievement():
 	var server = get_tree().get_first_node_in_group("server_request")
 	server.create_achievement(self)
+	
+func send_delete_achievement():
+	var server = get_tree().get_first_node_in_group("server_request")
+	server.delete_achievement(self)
