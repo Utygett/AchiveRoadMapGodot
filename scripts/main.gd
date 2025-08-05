@@ -138,4 +138,5 @@ func create_achive_from_dictionary(data: Dictionary):
 	var description = data.description
 	var timestamp = data.timestamp
 	var achive = add_achievement(0, main_camera.global_position, name, img_url)
+	achive.description = description
 	achive.send_create_achievement()

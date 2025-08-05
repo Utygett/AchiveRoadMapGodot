@@ -27,7 +27,8 @@ func delete_achievement(achievement):
 func update_achievement_data(achievement):
 	var data = {
 		"x": int(achievement.global_position.x),
-		"y": int(achievement.global_position.y)
+		"y": int(achievement.global_position.y),
+		"description": achievement.description
 	}
 	update_achievement(achievement.achieve_id, achievement.client_uid, data)
 
@@ -48,6 +49,7 @@ func create_achievement(achievement):
 		"y": y,
 		"width": width,
 		"height": height,
+		"description": achievement.description,
 		"icon_url": achievement.icon.resource_path
 	}
 	
