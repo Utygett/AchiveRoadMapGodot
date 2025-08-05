@@ -28,11 +28,17 @@ func _on_request_completed(request_id, type, data):
 		RequestType.GET_MAP:
 			map_api.on_map_data_loaded(data)
 
-func _on_request_failed(request_id, error):
-	print("Request", request_id, "failed:", error)
+func _on_request_failed(request_id, type, error):
+	print("Request: ", request_id, " Type: ", type, " failed:", error)
+
+func create_achievement(achievement):
+	achievement_api.create_achievement(achievement)
 
 func update_achievement(achievement):
 	achievement_api.update_achievement_data(achievement)
+	
+func delete_achievement(achievement):
+	achievement_api.delete_achievement(achievement)
 
 func create_connection(map_id: int, from_id: int, to_id: int):
 	connection_api.create_connection(map_id, from_id, to_id)

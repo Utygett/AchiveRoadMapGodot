@@ -17,8 +17,10 @@ var base_scale = Vector2.ONE  # Сохраняем базовый размер
 var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 var connection_id = 0
 var map_id = -1
+var client_uuid = ""
 
 func _ready() -> void:
+	client_uuid = UuidManager.generate_uuid()
 	z_index = 15
 	line.connect("remove_connection", remove_connection)
 

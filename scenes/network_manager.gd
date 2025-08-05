@@ -4,6 +4,8 @@ class_name HTTPRequestQueue
 signal request_completed(request_id, type, body)
 signal request_failed(request_id, type, error)
 
+@onready var server_requests: Node = $".."
+
 var _queue = []  # Очередь запросов
 var _current_request = null
 var _http_request = HTTPRequest.new()
@@ -31,6 +33,7 @@ func add_request(type: int, method: HTTPClient.Method, url: String, data: Varian
 	}
 	
 	_queue.push_back(request_data)
+	
 	
 	# Если очередь не обрабатывается, запускаем обработку
 	if not _is_processing:
@@ -71,7 +74,7 @@ func _on_HTTPRequest_request_completed(result, response_code, headers, body):
 		if json.parse(body.get_string_from_utf8()) == OK:
 			emit_signal("request_completed", request_id, type, json.data)
 		else:
-			emit_signal("request_failed", request_id, "Failed to parse JSON response")
+			emit_signal("request_failed", request_id, type, "Failed to parse JSON response")
 	else:
 		var error_msg = "Error %d: %s" % [response_code, body.get_string_from_utf8()]
 		emit_signal("request_failed", request_id, type, error_msg)

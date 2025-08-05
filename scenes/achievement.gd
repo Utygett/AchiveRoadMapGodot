@@ -27,8 +27,10 @@ var connections_from: Array = []  # Исходящие связи
 var connections_to: Array = []  # Входящие связи
 var achieve_id = 0
 var map_id = 0
+var client_uid = ""
 
 func _ready():
+	client_uid = UuidManager.generate_uuid()
 	# Устанавливаем иконку
 	sprite_2d.texture = icon
 	base_scale = scale
@@ -128,6 +130,7 @@ func _on_menu_item_selected(id):
 		MenuItems.INFO:
 			print("Описание: ", description)
 		MenuItems.DELETE:
+			send_delete_achievement()
 			queue_free()
 		MenuItems.START_CONNECTION:  # Начать соединение
 			connection_manager.start_connection(self)
@@ -159,3 +162,11 @@ func update_connection():
 func send_update_position_to_server():
 	var server = get_tree().get_first_node_in_group("server_request")
 	server.update_achievement(self)
+
+func send_create_achievement():
+	var server = get_tree().get_first_node_in_group("server_request")
+	server.create_achievement(self)
+	
+func send_delete_achievement():
+	var server = get_tree().get_first_node_in_group("server_request")
+	server.delete_achievement(self)
