@@ -28,6 +28,7 @@ func create_connection(map_id: int, from_id: int, to_id: int):
 	var url = "/maps/%d/connections" % map_id
 	
 	var body = {
+		"client_uid": "client_uidfsdfsdfsdfds", #TODO
 		"from_achievement_id": from_id,
 		"to_achievement_id": to_id,
 	}

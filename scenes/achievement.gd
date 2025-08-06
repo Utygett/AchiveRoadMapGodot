@@ -17,6 +17,8 @@ enum MenuItems {
 	
 	
 var is_dragging = false
+var click_timer := Timer.new()
+var is_click_valid := false
 var drag_offset = Vector2.ZERO
 var mouse_over = false #Мышь над объектом?
 var base_scale = Vector2.ONE  # Сохраняем базовый размер
@@ -30,6 +32,12 @@ var map_id = 0
 var client_uid = ""
 
 func _ready():
+	# Настройка таймера для определения клика
+	add_child(click_timer)
+	click_timer.wait_time = 0.2  # Время для распознавания клика (200 мс)
+	click_timer.one_shot = true
+	click_timer.timeout.connect(_on_click_timeout)
+	
 	client_uid = UuidManager.generate_uuid()
 	# Устанавливаем иконку
 	sprite_2d.texture = icon
@@ -42,16 +50,16 @@ func _ready():
 	area_2d.input_event.connect(_on_area_input_event)
 	area_2d.mouse_entered.connect(_on_area_mouse_entered)
 	area_2d.mouse_exited.connect(_on_area_mouse_exited)
-	
-	
 
 func _on_area_input_event(viewport,event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
 		if event.pressed:
 			# Начало перетаскивания
-			is_dragging = true
+			#is_dragging = true
 			drag_offset = global_position - get_global_mouse_position()
-			
+			# Начало потенциального клика
+			is_click_valid = true
+			click_timer.start()
 			# Поднимаем на самый верхний слой
 			z_index = 100
 			
@@ -69,6 +77,12 @@ func _on_area_input_event(viewport,event, _shape_idx):
 			lift_tween.parallel().tween_property(self, "modulate", Color(1.2, 1.2, 1.2), 0.1)
 		else:
 			# Конец перетаскивания
+			# Отпускание кнопки
+			if is_click_valid:
+				_on_left_click()
+			else:
+				send_update_position_to_server()
+			is_click_valid = false
 			is_dragging = false
 			# Включаем перетаскивание камеры
 			var camera = get_tree().get_first_node_in_group("main_camera")
@@ -80,9 +94,24 @@ func _on_area_input_event(viewport,event, _shape_idx):
 			var drop_tween = create_tween()
 			drop_tween.tween_property(self, "scale", base_scale * (Vector2(1.1, 1.1) if mouse_over else Vector2.ONE), 0.2)
 			drop_tween.parallel().tween_property(self, "modulate", base_modulate, 0.2)
-			send_update_position_to_server()
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
 		show_context_menu()
+
+func _on_click_timeout():
+	# Если таймер истек, это не клик
+	if is_click_valid:
+		is_dragging = true
+	is_click_valid = false
+	
+
+func _on_left_click():
+	print("Левый клик зарегистрирован")
+	print("Вызвать диалог создания достижения")
+	var dialog = preload("res://ui/create_achive_ui.tscn").instantiate()
+	get_tree().root.add_child(dialog)
+	# Подключаем сигналы
+	dialog.initFromAchive(self)
+	dialog.created.connect(on_update_achive_data)
 
 func _process(_delta):
 	if is_dragging:
@@ -152,6 +181,13 @@ func remove_outgoing_connection(start_connection:Node2D):
 
 func remove_incoming_connection(end_connection):
 	connections_to.erase(end_connection)
+
+func on_update_achive_data(data:Dictionary):
+	achievement_name = data.name
+	name_label.text = achievement_name
+	icon = load(data.image_url if data.image_url else "res://assets/no_image.png")
+	description = data.description
+	send_update_position_to_server()
 
 func update_connection():
 	for conn in connections_from:
