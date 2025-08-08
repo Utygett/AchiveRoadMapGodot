@@ -40,12 +40,18 @@ func create_achievement_node(id: int, title: String, position: Vector2, _size: V
 func create_connection_line(id: int, from_id: int, to_id: int, points: Array):
 	get_parent().get_parent().add_connection(id, from_id, to_id, points)
 
-func create_map(title: String, width: int, height: int, bg_url: String):
+func create_map(map):
+	var title = map.achievement_map_name
+	var width = map.tile_width
+	var height = map.tile_height 
+	var bg_url = map.bg_url
+	var uuid = map.client_uid
 	var url = "/maps/"
-	var body = JSON.stringify({
+	var body = {
+		"client_uid": uuid,
 		"title": title,
 		"width": width,
 		"height": height,
 		"background_image_url": bg_url
-	})
+	}
 	network_manager.add_request(server_requests.RequestType.CREATE_MAP, HTTPClient.METHOD_POST, url, body)

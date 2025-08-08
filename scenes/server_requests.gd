@@ -40,8 +40,8 @@ func update_achievement(achievement):
 func delete_achievement(achievement):
 	achievement_api.delete_achievement(achievement)
 
-func create_connection(map_id: int, from_id: int, to_id: int):
-	connection_api.create_connection(map_id, from_id, to_id)
+func create_connection(connection):
+	connection_api.create_connection(connection)
 
 func update_connection(connection):
 	connection_api.update_connection_data(connection)

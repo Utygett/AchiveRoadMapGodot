@@ -1,4 +1,4 @@
-[gd_scene load_steps=4 format=3 uid="uid://vr6j7gcboge0"]
+[gd_scene load_steps=4 format=3 uid="uid://cehounhtnc8ad"]
 
 [ext_resource type="Script" uid="uid://dieqepe4psosf" path="res://scenes/achievement.gd" id="1_rnxx6"]
 [ext_resource type="Texture2D" uid="uid://bt1nt6yw2mrf2" path="res://assets/square_border.png" id="2_rnxx6"]

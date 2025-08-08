@@ -22,10 +22,9 @@ UuidManager="*res://scenes/uuid_manager.gd"
 [display]
 
 window/size/viewport_width=480
-window/size/viewport_height=840
+window/size/viewport_height=820
 window/size/resizable=false
-window/stretch/mode="viewport"
-window/stretch/aspect="keep_width"
+window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
 [input_devices]

@@ -24,11 +24,15 @@ func delete_connection_from_server(connection):
 	delete_connection(connection.connection_id)
 
 # Добавление связи между достижениями
-func create_connection(map_id: int, from_id: int, to_id: int):
+func create_connection(connection):
+	var map_id = connection.map_id
+	var from_id = connection.from_achievement.achieve_id
+	var to_id = connection.to_achievement.achieve_id
+	var uuid = connection.client_uuid
 	var url = "/maps/%d/connections" % map_id
 	
 	var body = {
-		"client_uid": "client_uidfsdfsdfsdfds", #TODO
+		"client_uid": uuid,
 		"from_achievement_id": from_id,
 		"to_achievement_id": to_id,
 	}

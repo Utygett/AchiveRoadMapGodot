@@ -11,8 +11,13 @@ var tile_height = 15
 var dragged_achievement = null
 var achievement_map_name = "Math beginner"
 var map_id = -1
+var client_uid = ""
+var bg_url = ""
 
 func _ready():
+	# Создаём uuid
+	client_uid = UuidManager.generate_uuid()
+	# Соединяем диалог создания достижения с картой
 	editor_ui.connect("achive_created", create_achive_from_dictionary)
 	
 	# 1. Получаем данные из TileMapLayer
