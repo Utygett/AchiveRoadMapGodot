@@ -15,21 +15,6 @@ var client_uid = ""
 var bg_url = ""
 
 func _ready():
-		# Убедитесь, что камера настроена правильно
-	main_camera.make_current()
-	
-	## Установите лимиты камеры в соответствии с размером карты
-	#var tile_size_cam = grid_background.tile_set.tile_size
-	#var map_size_cam = Vector2(
-		#tile_width * tile_size_cam.x,
-		#tile_height * tile_size_cam.y
-	#)
-	#
-	#main_camera.limit_left = 0
-	#main_camera.limit_top = 0
-	#main_camera.limit_right = map_size_cam.x
-	#main_camera.limit_bottom = map_size_cam.y
-	
 	# Создаём uuid
 	client_uid = UuidManager.generate_uuid()
 	# Соединяем диалог создания достижения с картой
