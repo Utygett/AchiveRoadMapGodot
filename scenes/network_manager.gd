@@ -12,7 +12,8 @@ var _http_request = HTTPRequest.new()
 var _next_request_id = 1
 var _is_processing = false
 
-const BASE_URL = "http://127.0.0.1:8000"
+#const BASE_URL = "http://127.0.0.1:8000"
+const BASE_URL = "http://192.168.50.129:8000"
 
 func _ready():
 	add_child(_http_request)
