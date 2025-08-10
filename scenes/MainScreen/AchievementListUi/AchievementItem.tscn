@@ -1,0 +1,49 @@
+[gd_scene load_steps=2 format=3 uid="uid://caokv38qsrjql"]
+
+[ext_resource type="Script" uid="uid://bjqnkgdpav8ku" path="res://scenes/MainScreen/AchievementListUi/AchievementItem.gd" id="1_ajwk0"]
+
+[node name="AchievementItem" type="VBoxContainer"]
+custom_minimum_size = Vector2(400, 100)
+size_flags_horizontal = 3
+script = ExtResource("1_ajwk0")
+
+[node name="TopRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="TopRow"]
+custom_minimum_size = Vector2(32, 32)
+layout_mode = 2
+stretch_mode = 2
+
+[node name="TitleLabel" type="Label" parent="TopRow"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_font_sizes/font_size = 16
+text = "Title"
+
+[node name="StatusLabel" type="Label" parent="TopRow"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.6, 0.6, 0.9, 1)
+text = "Status"
+horizontal_alignment = 2
+
+[node name="DescriptionLabel" type="Label" parent="."]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "Description"
+autowrap_mode = 2
+
+[node name="BottomRow" type="HBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="ProgressBar" type="ProgressBar" parent="BottomRow"]
+custom_minimum_size = Vector2(200, 8)
+layout_mode = 2
+show_percentage = false
+
+[node name="ExtraLabel" type="Label" parent="BottomRow"]
+layout_mode = 2
+size_flags_horizontal = 2
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+horizontal_alignment = 2

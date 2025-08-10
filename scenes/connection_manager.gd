@@ -12,7 +12,7 @@ func end_connection(to: Node2D, from_data:bool = false):
 		#Создаем связь 
 		var active_connection = connection_scene.instantiate()
 		active_connection.map_id = connection_from.map_id
-		get_tree().current_scene.add_child(active_connection)
+		add_child(active_connection)
 		
 		# Регистрируем достижения в связи 
 		if from_data:
