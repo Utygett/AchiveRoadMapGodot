@@ -71,21 +71,25 @@ text = "In Progress"
 layout_mode = 2
 text = "Completed"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxMain"]
+[node name="ItemsScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxMain"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+scroll_deadzone = 5
 
-[node name="ListVBox" type="VBoxContainer" parent="MarginContainer/VBoxMain/ScrollContainer"]
+[node name="ListVBox" type="VBoxContainer" parent="MarginContainer/VBoxMain/ItemsScrollContainer"]
 unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 theme_override_constants/separation = 10
 
-[node name="AchievementItem" parent="MarginContainer/VBoxMain/ScrollContainer/ListVBox" instance=ExtResource("2_8kbvx")]
+[node name="Panel" parent="MarginContainer/VBoxMain/ItemsScrollContainer/ListVBox" instance=ExtResource("2_8kbvx")]
 layout_mode = 2
 
-[node name="AchievementItem2" parent="MarginContainer/VBoxMain/ScrollContainer/ListVBox" instance=ExtResource("2_8kbvx")]
+[node name="Panel2" parent="MarginContainer/VBoxMain/ItemsScrollContainer/ListVBox" instance=ExtResource("2_8kbvx")]
 layout_mode = 2
 
 [node name="BottomDummyPanel" type="Panel" parent="MarginContainer/VBoxMain"]

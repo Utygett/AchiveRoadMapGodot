@@ -1,13 +1,17 @@
 extends CanvasLayer
 @onready var list_v_box: VBoxContainer = %ListVBox
+@onready var items_scroll_container: ScrollContainer = %ItemsScrollContainer
 
 func _ready():
+	var scroll_container = items_scroll_container
+	
+	
 	var items_data = [
 		{
 			"icon": "res://assets/comprassion.png",
 			"title": "Code Master",
 			"status": "IN PROGRESS",
-			"description": "Complete 5 programming challenges in different languages",
+			"description": "Complete 5 programming challenges in gdsgdfglfdsgkjdsf; jds;fgj ds'jg sd'fkjg sdlkfgj ;sdlgkj s;dj dsfgsdlsdf'sdglfdkgjewjrhffsldghksjf sdf ;sdgk ;sldkfksdjrkje  jsdkl;jflksjd'sifowtie'; sjdfhewf owiejf;wejfo ikpdjfewstowfgiog weruhweofdifferent languages",
 			"progress": 60,
 			"progress_text": "3/5 completed"
 		},
@@ -25,10 +29,59 @@ func _ready():
 			"description": "Collaborate with 10 different users on projects",
 			"progress": 40,
 			"progress_text": "4/10 collaborations"
+		},
+		{
+			"icon": "res://assets/Sum_to_10.png",
+			"title": "Team TEST",
+			"status": "LOCKED",
+			"description": "Collaborate with 10 different users on projects",
+			"progress": 50,
+			"progress_text": "1/2 collaborations"
+		},
+		{
+			"icon": "res://assets/Sum_to_10.png",
+			"title": "Team TEST",
+			"status": "LOCKED",
+			"description": "Collaborate with 10 different users on projects",
+			"progress": 50,
+			"progress_text": "1/2 collaborations"
+		},
+		{
+			"icon": "res://assets/Sum_to_10.png",
+			"title": "Team TEST",
+			"status": "LOCKED",
+			"description": "Collaborate with 10 different users on projects",
+			"progress": 50,
+			"progress_text": "1/2 collaborations"
+		},
+		{
+			"icon": "res://assets/Sum_to_10.png",
+			"title": "Team TEST",
+			"status": "LOCKED",
+			"description": "Collaborate with 10 different users on projects",
+			"progress": 50,
+			"progress_text": "1/2 collaborations"
+		},
+		{
+			"icon": "res://assets/Sum_to_10.png",
+			"title": "Team TEST",
+			"status": "LOCKED",
+			"description": "Collaborate with 10 different users on projects",
+			"progress": 50,
+			"progress_text": "1/2 collaborations"
+		},
+		{
+			"icon": "res://assets/Sum_to_10.png",
+			"title": "Team TEST",
+			"status": "LOCKED",
+			"description": "Collaborate with 10 different users on projects",
+			"progress": 50,
+			"progress_text": "1/2 collaborations"
 		}
 	]
 	var item_scene = preload("res://scenes/MainScreen/AchievementListUi/AchievementItem.tscn")
 	for data in items_data:
 		var item = item_scene.instantiate()
-		item.set_data(data)
 		list_v_box.add_child(item)
+		item.set_data(data)
+		
