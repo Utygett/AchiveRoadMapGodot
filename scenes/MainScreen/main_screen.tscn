@@ -15,7 +15,7 @@ unique_name_in_owner = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
-[node name="ColorRect" type="ColorRect" parent="CanvasLayer"]
+[node name="ColorRectBottom" type="ColorRect" parent="CanvasLayer"]
 custom_minimum_size = Vector2(0, 96)
 anchors_preset = 12
 anchor_top = 1.0
@@ -38,6 +38,12 @@ size_flags_vertical = 3
 [node name="TopPanel" type="Panel" parent="CanvasLayer/VBoxContainer"]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/VBoxContainer/TopPanel"]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 23.0
+text = "Здесь могла бы быть ваша реклама"
 
 [node name="Spacer" type="Control" parent="CanvasLayer/VBoxContainer"]
 layout_mode = 2

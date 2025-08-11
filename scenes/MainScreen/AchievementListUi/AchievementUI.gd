@@ -1,4 +1,5 @@
 extends CanvasLayer
+@onready var list_v_box: VBoxContainer = %ListVBox
 
 func _ready():
 	var items_data = [
@@ -30,4 +31,4 @@ func _ready():
 	for data in items_data:
 		var item = item_scene.instantiate()
 		item.set_data(data)
-		$VBoxMain/ScrollContainer/ListVBox.add_child(item)
+		list_v_box.add_child(item)

@@ -1,57 +1,94 @@
-[gd_scene load_steps=2 format=3 uid="uid://djvfdxsg4u8jc"]
+[gd_scene load_steps=3 format=3 uid="uid://djvfdxsg4u8jc"]
 
 [ext_resource type="Script" uid="uid://kfb2imop8h5p" path="res://scenes/MainScreen/AchievementListUi/AchievementUI.gd" id="1_gilrq"]
+[ext_resource type="PackedScene" uid="uid://caokv38qsrjql" path="res://scenes/MainScreen/AchievementListUi/AchievementItem.tscn" id="2_8kbvx"]
 
 [node name="AchievementUI" type="CanvasLayer"]
 script = ExtResource("1_gilrq")
 
-[node name="VBoxMain" type="VBoxContainer" parent="."]
+[node name="ColorRectMain" type="ColorRect" parent="."]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 8
+color = Color(0.113725, 0.113725, 0.184314, 1)
 
-[node name="Header" type="HBoxContainer" parent="VBoxMain"]
+[node name="MarginContainer" type="MarginContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 25
+theme_override_constants/margin_top = 0
+theme_override_constants/margin_right = 25
+
+[node name="VBoxMain" type="VBoxContainer" parent="MarginContainer"]
+layout_mode = 2
+
+[node name="TopDummyPanel" type="Panel" parent="MarginContainer/VBoxMain"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+
+[node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxMain"]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="Title" type="Label" parent="VBoxMain/Header"]
+[node name="Title" type="Label" parent="MarginContainer/VBoxMain/Header"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 theme_override_font_sizes/font_size = 24
 text = "Achievements"
 
-[node name="EditMap" type="Button" parent="VBoxMain/Header"]
+[node name="EditMap" type="Button" parent="MarginContainer/VBoxMain/Header"]
 custom_minimum_size = Vector2(100, 30)
 layout_mode = 2
 size_flags_horizontal = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
 text = "Edit Map"
 
-[node name="FilterScroll" type="ScrollContainer" parent="VBoxMain"]
+[node name="FilterScroll" type="ScrollContainer" parent="MarginContainer/VBoxMain"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FilterHBox" type="HBoxContainer" parent="VBoxMain/FilterScroll"]
+[node name="FilterHBox" type="HBoxContainer" parent="MarginContainer/VBoxMain/FilterScroll"]
 layout_mode = 2
 
-[node name="FilterAll" type="Button" parent="VBoxMain/FilterScroll/FilterHBox"]
+[node name="FilterAll" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterHBox"]
 layout_mode = 2
 text = "All"
 
-[node name="FilterInProgress" type="Button" parent="VBoxMain/FilterScroll/FilterHBox"]
+[node name="FilterInProgress" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterHBox"]
 layout_mode = 2
 text = "In Progress"
 
-[node name="FilterCompleted" type="Button" parent="VBoxMain/FilterScroll/FilterHBox"]
+[node name="FilterCompleted" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterHBox"]
 layout_mode = 2
 text = "Completed"
 
-[node name="ScrollContainer" type="ScrollContainer" parent="VBoxMain"]
+[node name="ScrollContainer" type="ScrollContainer" parent="MarginContainer/VBoxMain"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="ListVBox" type="VBoxContainer" parent="VBoxMain/ScrollContainer"]
+[node name="ListVBox" type="VBoxContainer" parent="MarginContainer/VBoxMain/ScrollContainer"]
+unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="AchievementItem" parent="MarginContainer/VBoxMain/ScrollContainer/ListVBox" instance=ExtResource("2_8kbvx")]
+layout_mode = 2
+
+[node name="AchievementItem2" parent="MarginContainer/VBoxMain/ScrollContainer/ListVBox" instance=ExtResource("2_8kbvx")]
+layout_mode = 2
+
+[node name="BottomDummyPanel" type="Panel" parent="MarginContainer/VBoxMain"]
+modulate = Color(1, 1, 1, 0)
+custom_minimum_size = Vector2(0, 96)
+layout_mode = 2
