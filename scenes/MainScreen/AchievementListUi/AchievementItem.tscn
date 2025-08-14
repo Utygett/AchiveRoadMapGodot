@@ -1,4 +1,4 @@
-[gd_scene load_steps=3 format=3 uid="uid://caokv38qsrjql"]
+[gd_scene load_steps=4 format=3 uid="uid://caokv38qsrjql"]
 
 [ext_resource type="Script" uid="uid://0mx6cpw15jrt" path="res://scenes/MainScreen/AchievementListUi/achievement_item.gd" id="1_85sd7"]
 
@@ -14,9 +14,16 @@ corner_radius_top_right = 10
 corner_radius_bottom_right = 10
 corner_radius_bottom_left = 10
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_85sd7"]
+bg_color = Color(0.203922, 0.67451, 0.878431, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
 [node name="AchievementItem" type="PanelContainer"]
-offset_right = 414.0
-offset_bottom = 108.0
+offset_right = 424.0
+offset_bottom = 116.0
 theme_override_styles/panel = SubResource("StyleBoxFlat_ajwk0")
 script = ExtResource("1_85sd7")
 
@@ -47,7 +54,7 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
-theme_override_font_sizes/font_size = 16
+theme_override_font_sizes/font_size = 22
 text = "Title"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/Column/TopRow"]
@@ -55,12 +62,13 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 2
 theme_override_colors/font_color = Color(0.6, 0.6, 0.9, 1)
+theme_override_font_sizes/font_size = 22
 text = "Status"
 horizontal_alignment = 2
 
 [node name="DescContainer" type="ScrollContainer" parent="MarginContainer/Column"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(0, 40)
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 horizontal_scroll_mode = 0
 
@@ -70,7 +78,8 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 6
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
-text = "Description dsd sds dsd sd sfdsfdsfkljsd lfsjdkfjdsklj lfksjdlkfjdlksjflskdfj lksdfjsdlk fjsdlkfjsd;haouehfa;oeufhaljfhaeouifhe;fewaufhsjlfhd;afsoeuifhasifas;eoifhasefhas;iofhsa;ieofhaseoifhasefoashoefiosaefe"
+theme_override_font_sizes/font_size = 16
+text = "Description dsd sds dsd sd "
 autowrap_mode = 2
 
 [node name="BottomRow" type="HBoxContainer" parent="MarginContainer/Column"]
@@ -78,13 +87,15 @@ layout_mode = 2
 
 [node name="ProgressBar" type="ProgressBar" parent="MarginContainer/Column/BottomRow"]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(200, 8)
+custom_minimum_size = Vector2(300, 8)
 layout_mode = 2
+theme_override_styles/fill = SubResource("StyleBoxFlat_85sd7")
+value = 30.0
 show_percentage = false
 
 [node name="ExtraLabel" type="Label" parent="MarginContainer/Column/BottomRow"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 10
 theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
 horizontal_alignment = 2

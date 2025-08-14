@@ -8,9 +8,6 @@ extends PanelContainer
 @onready var extra_label: Label = %ExtraLabel
 @onready var desc_container: ScrollContainer = %DescContainer
 
-func _ready():
-	print("icon node:", get_node_or_null("AchievementItem/TopRow/Icon"))
-	print("title node:", get_node_or_null("AchievementItem/TopRow/TitleLabel"))
 
 func set_data(data: Dictionary) -> void:
 	if data.has("icon") and data.icon != null:
@@ -27,6 +24,8 @@ func set_data(data: Dictionary) -> void:
 	elif data.status == "COMPLETED":
 		progress_bar.hide()
 		extra_label.text = data.date
+	elif data.status == "LOCKED":
+		progress_bar.hide()
 
 
 func _set_status_label(text):
@@ -46,5 +45,28 @@ func _set_status_label(text):
 
 func _set_description(description: String):
 	description_label.text = description
+	update_scroll_size()
 	
 	
+func update_scroll_size():
+	# Ждем обновления лейбла
+	await get_tree().process_frame
+	
+	# Рассчитываем максимальную высоту для 4 строк
+	var line_height = description_label.get_line_height()
+	var count_line = description_label.get_line_count()
+	var max_height = line_height * 4
+	if count_line < 4:
+		max_height = line_height * count_line
+	
+	# Устанавливаем размеры
+	#description_label.custom_minimum_size.y = 0  # Разрешаем сжатие
+	#description_label.custom_maximum_size.y = max_height
+	
+	# Настраиваем контейнер
+	#desc_container.custom_minimum_size.y = max_height
+	desc_container.custom_minimum_size.x = 0
+	desc_container.custom_minimum_size.y = max_height
+	
+	# Обновляем контейнер
+	desc_container.queue_redraw()
