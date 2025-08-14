@@ -1,6 +1,7 @@
-[gd_scene load_steps=3 format=3 uid="uid://djvfdxsg4u8jc"]
+[gd_scene load_steps=4 format=3 uid="uid://djvfdxsg4u8jc"]
 
 [ext_resource type="Script" uid="uid://kfb2imop8h5p" path="res://scenes/MainScreen/AchievementListUi/AchievementUI.gd" id="1_gilrq"]
+[ext_resource type="Script" uid="uid://dtrq6et61k8bl" path="res://scenes/MainScreen/AchievementListUi/filter_buttons_h_box.gd" id="2_5htvj"]
 [ext_resource type="PackedScene" uid="uid://caokv38qsrjql" path="res://scenes/MainScreen/AchievementListUi/AchievementItem.tscn" id="2_8kbvx"]
 
 [node name="AchievementUI" type="CanvasLayer"]
@@ -35,6 +36,7 @@ custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
 [node name="Header" type="HBoxContainer" parent="MarginContainer/VBoxMain"]
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
 
@@ -54,20 +56,26 @@ text = "Edit Map"
 [node name="FilterScroll" type="ScrollContainer" parent="MarginContainer/VBoxMain"]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
-size_flags_horizontal = 3
 
-[node name="FilterHBox" type="HBoxContainer" parent="MarginContainer/VBoxMain/FilterScroll"]
+[node name="FilterButtonsHBox" type="HBoxContainer" parent="MarginContainer/VBoxMain/FilterScroll"]
+custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
+size_flags_horizontal = 3
+script = ExtResource("2_5htvj")
 
-[node name="FilterAll" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterHBox"]
+[node name="FilterAll" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterButtonsHBox"]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(50, 0)
 layout_mode = 2
 text = "All"
 
-[node name="FilterInProgress" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterHBox"]
+[node name="FilterInProgress" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterButtonsHBox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "In Progress"
 
-[node name="FilterCompleted" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterHBox"]
+[node name="FilterCompleted" type="Button" parent="MarginContainer/VBoxMain/FilterScroll/FilterButtonsHBox"]
+unique_name_in_owner = true
 layout_mode = 2
 text = "Completed"
 
