@@ -54,13 +54,14 @@ stretch_mode = 5
 unique_name_in_owner = true
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_constants/outline_size = 7
 theme_override_font_sizes/font_size = 22
 text = "Title"
 
 [node name="StatusLabel" type="Label" parent="MarginContainer/Column/TopRow"]
 unique_name_in_owner = true
 layout_mode = 2
-size_flags_horizontal = 2
+size_flags_horizontal = 10
 theme_override_colors/font_color = Color(0.6, 0.6, 0.9, 1)
 theme_override_font_sizes/font_size = 22
 text = "Status"
