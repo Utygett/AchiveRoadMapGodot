@@ -19,6 +19,21 @@ func update_connection_data(connection):
 		points_data.append({"x": int(point.global_position.x), "y": int(point.global_position.y)})
 	
 	update_connection(connection.connection_id, {"points": points_data})
+		# обновляем модель
+	var model := ConnectionData.new()
+	model.id = connection.id
+	model.map_id = connection.map_id
+	model.from_achievement_id = connection.from_achievement_id
+	model.to_achievement_id = connection.to_achievement_id
+	
+	var pts: Array[Vector2] = []
+	if connection.has("points") and connection.points != null:
+		for p in connection.points:
+			pts.append(Vector2(p.x, p.y))
+	model.points = pts
+	
+	DataStore.upsert_connection(model.map_id, model)
+
 
 func delete_connection_from_server(connection):
 	delete_connection(connection.connection_id)

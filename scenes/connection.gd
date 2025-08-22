@@ -1,4 +1,4 @@
-
+class_name AchieveConnection
 extends Node2D
 
 @onready var line: Line2D = %Line
@@ -18,13 +18,16 @@ var base_modulate = Color.WHITE  # Сохраняем базовый цвет
 var connection_id = 0
 var map_id = -1
 var client_uuid = ""
+var model: ConnectionData = null
 
 func _ready() -> void:
 	client_uuid = UuidManager.generate_uuid()
 	z_index = 15
 	line.connect("remove_connection", remove_connection)
 
-
+func bind_model(m: ConnectionData) -> void:
+	model = m
+	# тут можешь сразу построить линию по m.points
 
 # Инициализация соединения
 func initialize(from: Node2D, to: Node2D):

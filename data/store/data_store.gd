@@ -16,18 +16,44 @@ func set_map(map_data: MapData) -> void:
 	save_map_to_cache(map_data.id)
 	map_loaded.emit(map_data.id)
 
-func upsert_connection(map_id: int, conn: ConnectionData) -> void:
+func upsert_achievement(map_id: int, ach: AchievementData) -> void:
+	if _maps.has(map_id):
+		var m: MapData = _maps[map_id]
+		var found := false
+		for i in range(m.achievements.size()):
+			if m.achievements[i].id == ach.id:
+				# безопасный способ заменить
+				m.achievements.remove_at(i)
+				m.achievements.insert(i, ach)
+				found = true
+				break
+		if not found:
+			m.achievements.append(ach)
+	save_map_to_cache(map_id)
+	achievement_upserted.emit(map_id, ach)
+
+func remove_achievement(map_id: int, ach_id: int) -> void:
 	var m := get_map(map_id)
 	if m == null: return
-	var idx = null
-	for connection in m.connections:
-		if connection.id == conn.id:  # Replace with your condition
-			idx = conn.id
-			break
-	if idx == -1:
-		m.connections.append(conn)
-	else:
-		m.connections[idx] = conn
+	m.achievements = m.achievements.filter(func(a): return a.id != ach_id)
+	# грохнем связи, которые ссылались на удалённое достижение
+	m.connections = m.connections.filter(func(c):
+		return c.from_achievement_id != ach_id and c.to_achievement_id != ach_id)
+	save_map_to_cache(map_id)
+	achievement_removed.emit(map_id, ach_id)
+
+func upsert_connection(map_id: int, conn: ConnectionData) -> void:
+	if _maps.has(map_id):
+		var m: MapData = _maps[map_id]
+		var found := false
+		for i in range(m.connections.size()):
+			if m.connections[i].id == conn.id:
+				m.connections.remove_at(i)
+				m.connections.insert(i, conn)
+				found = true
+				break
+		if not found:
+			m.connections.append(conn)
 	save_map_to_cache(map_id)
 	connection_upserted.emit(map_id, conn)
 

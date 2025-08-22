@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 Bootstrap="*res://scenes/global/bootstrap.tscn"
 UuidManager="*res://scenes/uuid_manager.gd"
+DataStore="*res://data/store/data_store.gd"
 
 [display]
 

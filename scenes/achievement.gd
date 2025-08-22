@@ -1,4 +1,4 @@
-class_name  Achievment
+class_name  Achievement
 extends Node2D
 # Настройки
 @export var achievement_name: String = "Новое достижение"
@@ -30,6 +30,7 @@ var connections_to: Array = []  # Входящие связи
 var achieve_id = 0
 var map_id = 0
 var client_uid = ""
+var model: AchievementData = null
 
 func _ready():
 	# Настройка таймера для определения клика
@@ -50,6 +51,15 @@ func _ready():
 	area_2d.input_event.connect(_on_area_input_event)
 	area_2d.mouse_entered.connect(_on_area_mouse_entered)
 	area_2d.mouse_exited.connect(_on_area_mouse_exited)
+
+func bind_model(m: AchievementData) -> void:
+	model = m
+	achievement_name = m.title
+	name_label.text = m.title
+	description = m.description
+	icon = load(m.icon_url if m.icon_url != "" else "res://assets/no_image.png")
+	position = m.position
+
 
 func _on_area_input_event(viewport,event, _shape_idx):
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
@@ -187,6 +197,13 @@ func on_update_achive_data(data:Dictionary):
 	name_label.text = achievement_name
 	icon = load(data.image_url if data.image_url else "res://assets/no_image.png")
 	description = data.description
+	
+	if model != null:
+		model.title = achievement_name
+		model.icon_url = data.image_url if data.image_url else ""
+		model.description = description
+		DataStore.upsert_achievement(model.map_id, model)
+	
 	send_update_position_to_server()
 
 func update_connection():
@@ -196,8 +213,11 @@ func update_connection():
 		conn.update_connection()
 
 func send_update_position_to_server():
+	if model != null:
+		model.position = global_position
+		DataStore.upsert_achievement(model.map_id, model) # это сохранит кеш
 	var server = get_tree().get_first_node_in_group("server_request")
-	server.update_achievement(self)
+	server.update_achievement(self) # пока оставим как есть
 
 func send_create_achievement():
 	var server = get_tree().get_first_node_in_group("server_request")

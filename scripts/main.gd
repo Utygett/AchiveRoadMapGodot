@@ -46,13 +46,57 @@ func _ready():
 	# 5. Создаем границы карты
 	create_map_borders(pixel_size)
 	
-	
-		# Добавляем тестовые достижения
-	#add_achievement(Vector2(500, 300), "Сумма до 10", "res://assets/Sum_to_10.png")
-	#add_achievement(Vector2(700, 300), "Сравнение", "res://assets/comprassion.png")
-	
+	# 1) показать кеш оффлайн (мгновенно)
+	var cached := DataStore.load_map_from_cache(map_id)
+	if cached:
+		_rebuild_from_models(map_id)
+	# 2) подписка — когда придут данные с сервера или что-то изменится
+	DataStore.map_loaded.connect(func(mid):
+		if mid == map_id:
+			_rebuild_from_models(map_id)
+	)
+	DataStore.achievement_upserted.connect(func(mid, _a):
+		if mid == map_id:
+			# точечное обновление можно позже, пока — полная перерисовка:
+			_rebuild_from_models(map_id)
+	)
+	DataStore.connection_upserted.connect(func(mid, _c):
+		if mid == map_id:
+			_rebuild_from_models(map_id)
+	)
+	DataStore.achievement_removed.connect(func(mid, _id):
+		if mid == map_id:
+			_rebuild_from_models(map_id)
+	)
+	DataStore.connection_removed.connect(func(mid, _id):
+		if mid == map_id:
+			_rebuild_from_models(map_id)
+	)
+	# 3) Запрос к серверу как и раньше
 	var server = get_tree().get_first_node_in_group("server_request")
 	server.load_map_data(map_id)
+
+func _rebuild_from_models(mid: int) -> void:
+	if mid != map_id: return
+	var m := DataStore.get_map(map_id)
+	if m == null: return
+
+	# очистим контейнеры
+	achievement_container.queue_free()
+	var new_container := Node2D.new()
+	new_container.name = "AchievementContainer"
+	add_child(new_container)
+	achievement_container = new_container
+
+	# спавн достижений
+	for ach in m.achievements:
+		var node := add_achievement(ach.id, ach.position, ach.title, ach.icon_url) as Achievement
+		node.bind_model(ach)  # передаём модель
+		# (шаг 5) — позже передадим node.model = ach
+	# спавн связей
+	for conn in m.connections:
+		var node := add_connection(conn.id, conn.from_achievement_id, conn.to_achievement_id, conn.points) as AchieveConnection
+		node.bind_model(conn)
 
 func create_map_borders(size: Vector2):
 	# Создаем 4 коллайдера по краям карты
@@ -124,10 +168,11 @@ func add_connection(id: int, from_id: int, to_id: int, points: Array):
 	active_connection.map_id = map_id
 	for point in points:
 		active_connection.add_point_at_position(Vector2(point.x,point.y), true)
+	return active_connection
 
 func get_achieve_from_id(achieve_id: int):
 	for i in range(achievement_container.get_child_count()):
-		var achive = achievement_container.get_child(i) as Achievment
+		var achive = achievement_container.get_child(i) as Achievement
 		if achive.achieve_id == achieve_id:
 			return achive
 	return null 

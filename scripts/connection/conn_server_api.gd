@@ -12,4 +12,7 @@ func update_connection_data():
 
 func remove_connection_on_server():
 	var server = get_tree().get_first_node_in_group("server_request")
-	server.remove_connection(connection)
+	server.delete_connection(self)
+	# и параллельно обновим локально
+	if connection != null:
+		DataStore.remove_connection(connection.map_id, connection.id)
