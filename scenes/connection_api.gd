@@ -21,7 +21,7 @@ func update_connection_data(connection):
 	update_connection(connection.connection_id, {"points": points_data})
 		# обновляем модель
 	var model := ConnectionData.new()
-	model.id = connection.id
+	model.id = connection.connection_id
 	model.map_id = connection.map_id
 	model.from_achievement_id = connection.from_achievement_id
 	model.to_achievement_id = connection.to_achievement_id
